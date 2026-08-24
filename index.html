@@ -293,6 +293,114 @@
         }
 
         /* ==========================================
+           COTIZADOR DE EVENTOS (Estilo Blesiú)
+           ========================================== */
+        .calculator-section {
+            padding: 6rem 2rem;
+            background-color: var(--color-cream-bg, #fbf6f3);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--color-dark-brown, #48372e);
+            border-top: 1px solid rgba(237, 194, 189, 0.3);
+        }
+
+        .calculator-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 1px solid rgba(237, 194, 189, 0.5);
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(72, 55, 46, 0.05);
+        }
+
+        .calc-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .calc-subtitle {
+            text-align: center;
+            color: #7b5d49;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .calc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #48372e;
+        }
+
+        select, input[type="number"] {
+            padding: 0.8rem 1rem;
+            border: 1px solid #edc2bd;
+            border-radius: 6px;
+            background-color: #fbf6f3;
+            font-size: 0.95rem;
+            color: #48372e;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        select:focus, input[type="number"]:focus {
+            border-color: #48372e;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .checkbox-group input {
+            width: 18px;
+            height: 18px;
+            accent-color: #48372e;
+        }
+
+        /* Resumen de Cotización */
+        .calc-summary {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: #fbf6f3;
+            border-radius: 8px;
+            border-left: 4px solid #edc2bd;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.4rem;
+            font-family: 'Playfair Display', serif;
+            font-weight: bold;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px dashed #edc2bd;
+        }
+
+        /* ==========================================
            FOOTER
            ========================================== */
         footer {
@@ -330,6 +438,8 @@
             .hero h1 { font-size: 2.5rem; }
             .about-grid { grid-template-columns: 1fr; gap: 2rem; }
             .nav-links { display: none; } /* En producción se añadiría un menú hamburguesa */
+            .calc-grid { grid-template-columns: 1fr; }
+            .form-group.full-width { grid-column: span 1; }
         }
     </style>
 </head>
@@ -346,7 +456,7 @@
                 <li><a href="#inicio">Inicio</a></li>
                 <li><a href="#nosotros">Nosotros</a></li>
                 <li><a href="#experiencia">Experiencia</a></li>
-                <li><a href="#contacto">Contacto</a></li>
+                <li><a href="#cotizador">Cotizador</a></li>
             </ul>
         </div>
     </header>
@@ -357,7 +467,7 @@
             <span class="badge-estd">Estd. 2012</span>
             <h1>Pequeños placeres para grandes momentos</h1>
             <p>Descubre el refinamiento, la calidez y el detalle artesanal creados para elevar cada instante de tu día.</p>
-            <a href="#experiencia" class="cta-button">Explorar Colección</a>
+            <a href="#cotizador" class="cta-button">Cotizar Evento</a>
         </div>
     </section>
 
@@ -404,6 +514,106 @@
         </div>
     </section>
 
+    <!-- Sección del Cotizador -->
+    <section class="calculator-section" id="cotizador">
+        <div class="calculator-container">
+            <h2 class="calc-title">Cotiza tu Evento</h2>
+            <p class="calc-subtitle">Diseña la experiencia dulce para tus invitados</p>
+
+            <form id="cateringForm">
+                <div class="calc-grid">
+                    <!-- Barra de Postres -->
+                    <div class="form-group">
+                        <label for="postres">Cantidad de Postres</label>
+                        <select id="postres">
+                            <option value="0">Sin barra de postres</option>
+                            <option value="2300">100 postres ($2,300)</option>
+                            <option value="4600">200 postres ($4,600)</option>
+                            <option value="6900">300 postres ($6,900)</option>
+                            <option value="11500">500 postres ($11,500)</option>
+                        </select>
+                    </div>
+
+                    <!-- Pastel Utilería -->
+                    <div class="form-group">
+                        <label for="utileria">Pastel de Utilería</label>
+                        <select id="utileria">
+                            <option value="0">Sin pastel de utilería</option>
+                            <option value="2200">2 Pisos ($2,200)</option>
+                            <option value="2600">3 Pisos ($2,600)</option>
+                        </select>
+                    </div>
+
+                    <!-- Pastel Comestible -->
+                    <div class="form-group">
+                        <label for="comestible">Pastel Comestible</label>
+                        <select id="comestible">
+                            <option value="0" data-personas="0">Sin pastel comestible</option>
+                            <option value="1350" data-personas="50">50 personas ($1,350)</option>
+                            <option value="2450" data-personas="100">100 personas ($2,450)</option>
+                            <option value="3800" data-personas="150">150 personas ($3,800)</option>
+                        </select>
+                    </div>
+
+                    <!-- Sabor Especial -->
+                    <div class="form-group">
+                        <label>Opciones de Sabor</label>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="saborEspecial">
+                            <label for="saborEspecial" style="text-transform:none; font-weight:normal;">Sabor Especial (+$5 por persona)</label>
+                        </div>
+                    </div>
+
+                    <!-- Logística y Montaje -->
+                    <div class="form-group">
+                        <label for="bases">Bases para postres</label>
+                        <select id="bases">
+                            <option value="0">Sin renta de bases</option>
+                            <option value="1400">Incluir bases ($1,400)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="montaje">Servicio de Montaje</label>
+                        <select id="montaje">
+                            <option value="0">Sin montaje</option>
+                            <option value="3500">Montaje profesional ($3,500)</option>
+                        </select>
+                    </div>
+
+                    <!-- Flete -->
+                    <div class="form-group">
+                        <label for="distancia">Distancia de entrega (km)</label>
+                        <input type="number" id="distancia" min="0" value="0" placeholder="Ej. 15">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tipoZona">Tipo de Zona</label>
+                        <select id="tipoZona">
+                            <option value="local">Local</option>
+                            <option value="foraneo">Foráneo ($35 x km)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="tempAlta">
+                            <label for="tempAlta" style="text-transform:none; font-weight:normal;">Entrega en zona/temporada de Alta Temperatura (+$40 adicionales)</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resumen y Total -->
+                <div class="calc-summary">
+                    <div class="summary-total">
+                        <span>Estimado Total:</span>
+                        <span id="totalEstimado">$0.00 MXN</span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
     <!-- Pie de página -->
     <footer>
         <div class="footer-logo">Blesiú</div>
@@ -413,5 +623,65 @@
         </div>
     </footer>
 
+    <!-- Lógica del Cotizador -->
+    <script>
+        function calcularCotizacion() {
+            // 1. Postres
+            let costoPostres = parseFloat(document.getElementById('postres').value) || 0;
+
+            // 2. Utilería
+            let costoUtileria = parseFloat(document.getElementById('utileria').value) || 0;
+
+            // 3. Comestible + Sabor Especial
+            let selectComestible = document.getElementById('comestible');
+            let costoComestible = parseFloat(selectComestible.value) || 0;
+            let personasComestible = parseInt(selectComestible.options[selectComestible.selectedIndex].getAttribute('data-personas')) || 0;
+            
+            if (document.getElementById('saborEspecial').checked && personasComestible > 0) {
+                costoComestible += (personasComestible * 5);
+            }
+
+            // 4. Bases y Montaje
+            let costoBases = parseFloat(document.getElementById('bases').value) || 0;
+            let costoMontaje = parseFloat(document.getElementById('montaje').value) || 0;
+
+            // 5. Flete
+            let km = parseFloat(document.getElementById('distancia').value) || 0;
+            let tipoZona = document.getElementById('tipoZona').value;
+            let tempAlta = document.getElementById('tempAlta').checked;
+            let costoFlete = 0;
+
+            if (km > 0) {
+                if (tipoZona === 'foraneo') {
+                    costoFlete = km * 35;
+                } else {
+                    // Local: 700 por los primeros 10km + 25 por km extra
+                    costoFlete = 700;
+                    if (km > 10) {
+                        costoFlete += (km - 10) * 25;
+                    }
+                }
+
+                if (tempAlta) {
+                    costoFlete += 40;
+                }
+            }
+
+            // Cálculo Total
+            let total = costoPostres + costoUtileria + costoComestible + costoBases + costoMontaje + costoFlete;
+
+            // Renderizar Total
+            document.getElementById('totalEstimado').textContent = '$' + total.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' MXN';
+        }
+
+        // Event listeners para recalcular automáticamente al cambiar opciones
+        document.querySelectorAll('#cateringForm select, #cateringForm input').forEach(element => {
+            element.addEventListener('input', calcularCotizacion);
+            element.addEventListener('change', calcularCotizacion);
+        });
+
+        // Cálculo inicial
+        calcularCotizacion();
+    </script>
 </body>
 </html>
