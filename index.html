@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blesiú | Pequeños placeres para grandes momentos</title>
+    <!-- Tipografías de Google Fonts: Playfair Display y Sans-Serif para cuerpo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==========================================
+           VARIABLES DE MARCA (Manual Blesiú)
+           ========================================== */
+        :root {
+            --color-dark-brown: #48372e;  /* Profundidad sin agresividad */
+            --color-soft-pink: #edc2bd;   /* Dulzura, feminidad y cercanía */
+            --color-cream-bg: #fbf6f3;     /* Serenidad, orden y sofisticación */
+            --color-white: #ffffff;        /* Base y contención visual */
+            --color-earth-brown: #7b5d49;  /* Artesanal, orgánico y natural */
+            
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif; /* Alternativa limpia para Mae Variable */
+        }
+
+        /* Resets básicos */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-cream-bg);
+            color: var(--color-dark-brown);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Tipografía */
+        h1, h2, h3 {
+            font-family: var(--font-heading);
+            font-weight: 400;
+            color: var(--color-dark-brown);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ==========================================
+           NAVEGACIÓN / HEADER
+           ========================================== */
+        header {
+            background-color: rgba(251, 246, 243, 0.95);
+            backdrop-filter: blur(5px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(72, 55, 46, 0.08);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 2rem;
+        }
+
+        .brand-logo {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            font-style: italic;
+            color: var(--color-dark-brown);
+            letter-spacing: 1px;
+        }
+
+        .brand-logo span {
+            display: block;
+            font-family: var(--font-body);
+            font-size: 0.65rem;
+            font-style: normal;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-align: center;
+            color: var(--color-earth-brown);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .nav-links a {
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-soft-pink);
+        }
+
+        /* ==========================================
+           HERO SECTION
+           ========================================== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            background: linear-gradient(180deg, var(--color-cream-bg) 0%, #f4eae4 100%);
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .badge-estd {
+            display: inline-block;
+            border: 1px solid var(--color-earth-brown);
+            padding: 0.4rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--color-earth-brown);
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--color-earth-brown);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--color-dark-brown);
+            color: var(--color-white);
+            padding: 1rem 2.5rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(72, 55, 46, 0.15);
+        }
+
+        .cta-button:hover {
+            background-color: var(--color-earth-brown);
+            transform: translateY(-2px);
+        }
+
+        /* ==========================================
+           SECCIÓN SOBRE LA MARCA
+           ========================================== */
+        .about {
+            padding: 6rem 2rem;
+            background-color: var(--color-white);
+        }
+
+        .about-grid {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-image-frame {
+            border: 1px solid var(--color-soft-pink);
+            padding: 1.5rem;
+            border-radius: 50% / 40%;
+            text-align: center;
+        }
+
+        .about-image-inner {
+            background-color: var(--color-cream-bg);
+            border-radius: 50% / 40%;
+            padding: 4rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brand-monogram {
+            font-family: var(--font-heading);
+            font-size: 5rem;
+            font-style: italic;
+            color: var(--color-dark-brown);
+            line-height: 1;
+        }
+
+        .about-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-text p {
+            margin-bottom: 1.2rem;
+            color: #5a4a40;
+        }
+
+        /* ==========================================
+           DESTACADOS / PRODUCTOS
+           ========================================== */
+        .featured {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            color: var(--color-earth-brown);
+            font-style: italic;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .card {
+            background-color: var(--color-white);
+            border: 1px solid rgba(237, 194, 189, 0.4);
+            border-radius: 8px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(72, 55, 46, 0.08);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--color-soft-pink);
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-dark-brown);
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+        }
+
+        .card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .card p {
+            font-size: 0.95rem;
+            color: #66554b;
+        }
+
+        /* ==========================================
+           FOOTER
+           ========================================== */
+        footer {
+            background-color: var(--color-dark-brown);
+            color: var(--color-cream-bg);
+            padding: 4rem 2rem 2rem;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            font-style: italic;
+            margin-bottom: 0.5rem;
+            color: var(--color-soft-pink);
+        }
+
+        .footer-slogan {
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+        }
+
+        .footer-credits {
+            font-size: 0.8rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            opacity: 0.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .nav-links { display: none; } /* En producción se añadiría un menú hamburguesa */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navegación -->
+    <header>
+        <div class="nav-container">
+            <div class="brand-logo">
+                Blesiú
+                <span>ESTD. 2012</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#nosotros">Nosotros</a></li>
+                <li><a href="#experiencia">Experiencia</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Sección Principal (Hero) -->
+    <section class="hero" id="inicio">
+        <div class="hero-content">
+            <span class="badge-estd">Estd. 2012</span>
+            <h1>Pequeños placeres para grandes momentos</h1>
+            <p>Descubre el refinamiento, la calidez y el detalle artesanal creados para elevar cada instante de tu día.</p>
+            <a href="#experiencia" class="cta-button">Explorar Colección</a>
+        </div>
+    </section>
+
+    <!-- Sección Sobre la Marca -->
+    <section class="about" id="nosotros">
+        <div class="about-grid">
+            <div class="about-image-frame">
+                <div class="about-image-inner">
+                    <span class="brand-monogram">B</span>
+                    <span style="letter-spacing: 3px; font-size: 0.8rem; margin-top: 1rem; color: var(--color-earth-brown);">DESDE 2012</span>
+                </div>
+            </div>
+            <div class="about-text">
+                <h2>Sobriedad, refinamiento y carácter clásico</h2>
+                <p>Nuestra propuesta nace de la búsqueda de la belleza simple y bien hecha. Con proporciones armónicas y un estilo elegante sin caer en lo ornamental, creamos piezas e insumos cuidados minuciosamente.</p>
+                <p>Conectamos con lo artesanal y lo orgánico, recordando la tierra y valorando los ingredientes y materiales naturales en su forma más pura.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Experiencias / Productos -->
+    <section class="featured" id="experiencia">
+        <div class="section-header">
+            <h2>Nuestra Esencia</h2>
+            <p>La delicadeza de los detalles</p>
+        </div>
+        
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-icon">01</div>
+                <h3>Estilo Minimalista</h3>
+                <p>Líneas limpias y estructuras claras que permiten respirar a cada diseño con elegancia atemporal.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">02</div>
+                <h3>Origen Artesanal</h3>
+                <p>Conexión directa con procesos cuidados que honran la materia prima y el trabajo detallado.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">03</div>
+                <h3>Momentos Únicos</h3>
+                <p>Creamos experiencias pensadas para acompañarte en los instantes más especiales de tu vida.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pie de página -->
+    <footer>
+        <div class="footer-logo">Blesiú</div>
+        <p class="footer-slogan">Pequeños placeres para grandes momentos • Estd. 2012</p>
+        <div class="footer-credits">
+            &copy; 2026 Blesiú. Todos los derechos reservados.
+        </div>
+    </footer>
+
+</body>
+</html>
