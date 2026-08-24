@@ -206,12 +206,11 @@
             justify-content: center;
         }
 
-        .brand-monogram {
-            font-family: var(--font-heading);
-            font-size: 5rem;
-            font-style: italic;
-            color: var(--color-dark-brown);
-            line-height: 1;
+        .brand-monogram-img {
+            max-width: 120px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
         }
 
         .about-text h2 {
@@ -437,7 +436,7 @@
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.5rem; }
             .about-grid { grid-template-columns: 1fr; gap: 2rem; }
-            .nav-links { display: none; } /* En producción se añadiría un menú hamburguesa */
+            .nav-links { display: none; }
             .calc-grid { grid-template-columns: 1fr; }
             .form-group.full-width { grid-column: span 1; }
         }
@@ -476,7 +475,7 @@
         <div class="about-grid">
             <div class="about-image-frame">
                 <div class="about-image-inner">
-                    <span class="brand-monogram">B</span>
+                    <img src="https://nicbuilds.github.io/blesiu/b1.png" alt="Blesiú Monogram" class="brand-monogram-img">
                     <span style="letter-spacing: 3px; font-size: 0.8rem; margin-top: 1rem; color: var(--color-earth-brown);">DESDE 2012</span>
                 </div>
             </div>
