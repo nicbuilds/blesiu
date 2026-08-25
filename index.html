@@ -576,7 +576,7 @@
     <section class="calculator-section" id="cotizador">
         <div class="calculator-container" id="cotizadorPrintContainer">
             <h2 class="calc-title">Cotiza tu Evento</h2>
-            <p class="calc-subtitle">Diseña la experiencia dulce para tus invitados</p>
+            <p class="calc-subtitle">Diseña la experiencia dulce y salada para tus invitados</p>
 
             <form id="cateringForm">
                 <!-- Datos del Cliente / Evento -->
@@ -601,11 +601,25 @@
 
                 <!-- Opciones de Cotización -->
                 <div class="calc-grid">
-                    <!-- Cantidad de Postres (Casilla de número) -->
+                    <!-- Cantidad de Postres -->
                     <div class="form-group">
                         <label for="postres">Cantidad de Postres ($23 c/u)</label>
                         <input type="number" id="postres" min="60" max="5000" placeholder="Mínimo 60, máximo 5000">
                         <span id="postresError" class="error-msg">Ingresa entre 60 y 5000 piezas.</span>
+                    </div>
+
+                    <!-- Cantidad de Chilitos y Salados -->
+                    <div class="form-group">
+                        <label for="chilitos">Chilitos y Salados ($23 c/u)</label>
+                        <input type="number" id="chilitos" min="60" max="5000" placeholder="Mínimo 60, máximo 5000">
+                        <span id="chilitosError" class="error-msg">Ingresa entre 60 y 5000 piezas.</span>
+                    </div>
+
+                    <!-- Barra de Esquites / Maruchan / Tostilocos -->
+                    <div class="form-group full-width">
+                        <label for="barraEsquites">Barra de Esquites / Maruchan / Tostilocos ($6,900 x 300 pzs | +$23 pza extra)</label>
+                        <input type="number" id="barraEsquites" min="300" max="5000" placeholder="Mínimo 300, máximo 5000 unidades">
+                        <span id="esquitesError" class="error-msg">Ingresa entre 300 y 5000 unidades.</span>
                     </div>
 
                     <!-- Pastel Utilería -->
@@ -725,10 +739,46 @@
                 postresError.style.display = 'none';
             }
 
-            // 2. Utilería
+            // 2. Chilitos y Salados ($23 c/u, min 60, max 5000)
+            let chilitosInput = document.getElementById('chilitos');
+            let chilitosError = document.getElementById('chilitosError');
+            let numChilitos = parseInt(chilitosInput.value) || 0;
+            let costoChilitos = 0;
+
+            if (chilitosInput.value !== "") {
+                if (numChilitos < 60 || numChilitos > 5000) {
+                    chilitosError.style.display = 'block';
+                    costoChilitos = 0;
+                } else {
+                    chilitosError.style.display = 'none';
+                    costoChilitos = numChilitos * 23;
+                }
+            } else {
+                chilitosError.style.display = 'none';
+            }
+
+            // 3. Barra de Esquites / Maruchan / Tostilocos (min 300, max 5000. 300 pzs = $6900, +$23 pza adicional)
+            let esquitesInput = document.getElementById('barraEsquites');
+            let esquitesError = document.getElementById('esquitesError');
+            let numEsquites = parseInt(esquitesInput.value) || 0;
+            let costoEsquites = 0;
+
+            if (esquitesInput.value !== "") {
+                if (numEsquites < 300 || numEsquites > 5000) {
+                    esquitesError.style.display = 'block';
+                    costoEsquites = 0;
+                } else {
+                    esquitesError.style.display = 'none';
+                    costoEsquites = 6900 + ((numEsquites - 300) * 23);
+                }
+            } else {
+                esquitesError.style.display = 'none';
+            }
+
+            // 4. Utilería
             let costoUtileria = parseFloat(document.getElementById('utileria').value) || 0;
 
-            // 3. Comestible + Sabor Especial
+            // 5. Comestible + Sabor Especial
             let selectComestible = document.getElementById('comestible');
             let costoComestible = parseFloat(selectComestible.value) || 0;
             let personasComestible = parseInt(selectComestible.options[selectComestible.selectedIndex].getAttribute('data-personas')) || 0;
@@ -737,11 +787,11 @@
                 costoComestible += (personasComestible * 5);
             }
 
-            // 4. Bases y Montaje
+            // 6. Bases y Montaje
             let costoBases = parseFloat(document.getElementById('bases').value) || 0;
             let costoMontaje = parseFloat(document.getElementById('montaje').value) || 0;
 
-            // 5. Flete
+            // 7. Flete
             let km = parseFloat(document.getElementById('distancia').value) || 0;
             let tipoZona = document.getElementById('tipoZona').value;
             let tempAlta = document.getElementById('tempAlta').checked;
@@ -763,7 +813,7 @@
             }
 
             // Cálculo Total
-            let total = costoPostres + costoUtileria + costoComestible + costoBases + costoMontaje + costoFlete;
+            let total = costoPostres + costoChilitos + costoEsquites + costoUtileria + costoComestible + costoBases + costoMontaje + costoFlete;
 
             // Renderizar Total
             document.getElementById('totalEstimado').textContent = '$' + total.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' MXN';
@@ -771,6 +821,10 @@
             return {
                 numPostres,
                 costoPostres,
+                numChilitos,
+                costoChilitos,
+                numEsquites,
+                costoEsquites,
                 costoUtileria,
                 costoComestible,
                 costoBases,
@@ -836,6 +890,14 @@
                             <td style="padding: 10px; text-align: right;">$${data.costoPostres.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</td>
                         </tr>
                         <tr style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 10px;">Chilitos y Salados (${data.numChilitos} piezas)</td>
+                            <td style="padding: 10px; text-align: right;">$${data.costoChilitos.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 10px;">Barra de Esquites / Maruchan / Tostilocos (${data.numEsquites} unidades)</td>
+                            <td style="padding: 10px; text-align: right;">$${data.costoEsquites.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #eee;">
                             <td style="padding: 10px;">Pastel de Utilería: ${utileriaText}</td>
                             <td style="padding: 10px; text-align: right;">$${data.costoUtileria.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</td>
                         </tr>
@@ -886,6 +948,8 @@
                 fechaEvento: document.getElementById('fechaEvento').value,
                 lugarEvento: document.getElementById('lugarEvento').value,
                 postres: document.getElementById('postres').value,
+                chilitos: document.getElementById('chilitos').value,
+                barraEsquites: document.getElementById('barraEsquites').value,
                 utileria: document.getElementById('utileria').value,
                 comestible: document.getElementById('comestible').value,
                 saborEspecial: document.getElementById('saborEspecial').checked,
@@ -910,6 +974,8 @@
                 document.getElementById('fechaEvento').value = datos.fechaEvento || '';
                 document.getElementById('lugarEvento').value = datos.lugarEvento || '';
                 document.getElementById('postres').value = datos.postres || '';
+                document.getElementById('chilitos').value = datos.chilitos || '';
+                document.getElementById('barraEsquites').value = datos.barraEsquites || '';
                 document.getElementById('utileria').value = datos.utileria || '0';
                 document.getElementById('comestible').value = datos.comestible || '0';
                 document.getElementById('saborEspecial').checked = datos.saborEspecial || false;
