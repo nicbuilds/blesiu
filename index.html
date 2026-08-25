@@ -8,6 +8,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Librería para generar PDFs cliente -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
         /* ==========================================
@@ -21,7 +24,7 @@
             --color-earth-brown: #7b5d49;  /* Artesanal, orgánico y natural */
             
             --font-heading: 'Playfair Display', serif;
-            --font-body: 'Plus Jakarta Sans', sans-serif; /* Alternativa limpia para Mae Variable */
+            --font-body: 'Plus Jakarta Sans', sans-serif;
         }
 
         /* Resets básicos */
@@ -199,7 +202,7 @@
         .about-image-inner {
             background-color: var(--color-cream-bg);
             border-radius: 50% / 40%;
-            padding: 1rem 0.5rem; /* Padding reducido para aprovechar el espacio */
+            padding: 1rem 0.5rem;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -212,7 +215,7 @@
             height: auto;
             display: block;
             margin: 0 auto;
-            transform: scale(2.2); /* Amplía la imagen recortando virtualmente sus márgenes */
+            transform: scale(2.2);
         }
 
         .about-text h2 {
@@ -328,6 +331,12 @@
             font-style: italic;
         }
 
+        .calc-divider {
+            border: 0;
+            border-top: 1px dashed #edc2bd;
+            margin: 1.5rem 0;
+        }
+
         .calc-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -352,7 +361,7 @@
             color: #48372e;
         }
 
-        select, input[type="number"] {
+        select, input[type="number"], input[type="text"], input[type="date"] {
             padding: 0.8rem 1rem;
             border: 1px solid #edc2bd;
             border-radius: 6px;
@@ -361,10 +370,18 @@
             color: #48372e;
             outline: none;
             transition: border-color 0.3s;
+            font-family: inherit;
         }
 
-        select:focus, input[type="number"]:focus {
+        select:focus, input[type="number"]:focus, input[type="text"]:focus, input[type="date"]:focus {
             border-color: #48372e;
+        }
+
+        .error-msg {
+            font-size: 0.8rem;
+            color: #c0392b;
+            margin-top: 0.2rem;
+            display: none;
         }
 
         .checkbox-group {
@@ -380,7 +397,7 @@
             accent-color: #48372e;
         }
 
-        /* Resumen de Cotización */
+        /* Resumen de Cotización y Botones */
         .calc-summary {
             margin-top: 2rem;
             padding: 1.5rem;
@@ -399,6 +416,45 @@
             margin-top: 1rem;
             padding-top: 1rem;
             border-top: 1px dashed #edc2bd;
+        }
+
+        .calc-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            flex: 1;
+            min-width: 160px;
+            padding: 0.8rem 1.2rem;
+            border: 1px solid var(--color-dark-brown);
+            border-radius: 6px;
+            background-color: transparent;
+            color: var(--color-dark-brown);
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .btn-action:hover {
+            background-color: var(--color-earth-brown);
+            border-color: var(--color-earth-brown);
+            color: var(--color-white);
+        }
+
+        .btn-action.btn-primary-action {
+            background-color: var(--color-dark-brown);
+            color: var(--color-white);
+        }
+
+        .btn-action.btn-primary-action:hover {
+            background-color: var(--color-earth-brown);
         }
 
         /* ==========================================
@@ -441,6 +497,7 @@
             .nav-links { display: none; }
             .calc-grid { grid-template-columns: 1fr; }
             .form-group.full-width { grid-column: span 1; }
+            .calc-actions { flex-direction: column; }
         }
     </style>
 </head>
@@ -478,6 +535,7 @@
             <div class="about-image-frame">
                 <div class="about-image-inner">
                     <img src="https://nicbuilds.github.io/blesiu/b1.png" alt="Blesiú Monogram" class="brand-monogram-img">
+                    <span style="letter-spacing: 3px; font-size: 0.8rem; margin-top: 1rem; color: var(--color-earth-brown);">DESDE 2012</span>
                 </div>
             </div>
             <div class="about-text">
@@ -516,22 +574,38 @@
 
     <!-- Sección del Cotizador -->
     <section class="calculator-section" id="cotizador">
-        <div class="calculator-container">
+        <div class="calculator-container" id="cotizadorPrintContainer">
             <h2 class="calc-title">Cotiza tu Evento</h2>
             <p class="calc-subtitle">Diseña la experiencia dulce para tus invitados</p>
 
             <form id="cateringForm">
+                <!-- Datos del Cliente / Evento -->
                 <div class="calc-grid">
-                    <!-- Barra de Postres -->
+                    <div class="form-group full-width">
+                        <label for="nombreCliente">Nombre del Cliente</label>
+                        <input type="text" id="nombreCliente" placeholder="Ej. María García">
+                    </div>
+
                     <div class="form-group">
-                        <label for="postres">Cantidad de Postres</label>
-                        <select id="postres">
-                            <option value="0">Sin barra de postres</option>
-                            <option value="2300">100 postres ($2,300)</option>
-                            <option value="4600">200 postres ($4,600)</option>
-                            <option value="6900">300 postres ($6,900)</option>
-                            <option value="11500">500 postres ($11,500)</option>
-                        </select>
+                        <label for="fechaEvento">Fecha del Evento</label>
+                        <input type="date" id="fechaEvento">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lugarEvento">Lugar / Dirección del Evento</label>
+                        <input type="text" id="lugarEvento" placeholder="Ej. Jardín Las Rosas, Salón B">
+                    </div>
+                </div>
+
+                <hr class="calc-divider">
+
+                <!-- Opciones de Cotización -->
+                <div class="calc-grid">
+                    <!-- Cantidad de Postres (Casilla de número) -->
+                    <div class="form-group">
+                        <label for="postres">Cantidad de Postres ($23 c/u)</label>
+                        <input type="number" id="postres" min="60" max="5000" placeholder="Mínimo 60, máximo 5000">
+                        <span id="postresError" class="error-msg">Ingresa entre 60 y 5000 piezas.</span>
                     </div>
 
                     <!-- Pastel Utilería -->
@@ -610,6 +684,13 @@
                         <span id="totalEstimado">$0.00 MXN</span>
                     </div>
                 </div>
+
+                <!-- Botones de Acción (PDF, Guardar y Compartir) -->
+                <div class="calc-actions">
+                    <button type="button" class="btn-action btn-primary-action" onclick="descargarPDF()">Descargar PDF</button>
+                    <button type="button" class="btn-action" onclick="guardarCotizacion()">Guardar Datos</button>
+                    <button type="button" class="btn-action" onclick="compartirCotizacion()">Compartir</button>
+                </div>
             </form>
         </div>
     </section>
@@ -623,11 +704,26 @@
         </div>
     </footer>
 
-    <!-- Lógica del Cotizador -->
+    <!-- Lógica del Cotizador, PDF, Guardado y Compartido -->
     <script>
         function calcularCotizacion() {
-            // 1. Postres
-            let costoPostres = parseFloat(document.getElementById('postres').value) || 0;
+            // 1. Postres ($23 c/u, min 60, max 5000)
+            let postresInput = document.getElementById('postres');
+            let postresError = document.getElementById('postresError');
+            let numPostres = parseInt(postresInput.value) || 0;
+            let costoPostres = 0;
+
+            if (postresInput.value !== "") {
+                if (numPostres < 60 || numPostres > 5000) {
+                    postresError.style.display = 'block';
+                    costoPostres = 0;
+                } else {
+                    postresError.style.display = 'none';
+                    costoPostres = numPostres * 23;
+                }
+            } else {
+                postresError.style.display = 'none';
+            }
 
             // 2. Utilería
             let costoUtileria = parseFloat(document.getElementById('utileria').value) || 0;
@@ -655,7 +751,6 @@
                 if (tipoZona === 'foraneo') {
                     costoFlete = km * 35;
                 } else {
-                    // Local: 700 por los primeros 10km + 25 por km extra
                     costoFlete = 700;
                     if (km > 10) {
                         costoFlete += (km - 10) * 25;
@@ -672,15 +767,107 @@
 
             // Renderizar Total
             document.getElementById('totalEstimado').textContent = '$' + total.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' MXN';
+
+            return total;
         }
 
-        // Event listeners para recalcular automáticamente al cambiar opciones
+        // --- FUNCIONALIDAD PDF ---
+        function descargarPDF() {
+            let cliente = document.getElementById('nombreCliente').value || 'Cliente';
+            let elemento = document.getElementById('cotizadorPrintContainer');
+            
+            let opt = {
+                margin:       [0.5, 0.5, 0.5, 0.5],
+                filename:     `Cotizacion_Blesiu_${cliente.replace(/\s+/g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2 },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
+            // Ocultar botones temporalmente al imprimir PDF
+            let acciones = document.querySelector('.calc-actions');
+            acciones.style.display = 'none';
+
+            html2pdf().set(opt).from(elemento).save().then(() => {
+                acciones.style.display = 'flex';
+            });
+        }
+
+        // --- FUNCIONALIDAD GUARDAR LOCALMENTE ---
+        function guardarCotizacion() {
+            let datosCotizacion = {
+                nombreCliente: document.getElementById('nombreCliente').value,
+                fechaEvento: document.getElementById('fechaEvento').value,
+                lugarEvento: document.getElementById('lugarEvento').value,
+                postres: document.getElementById('postres').value,
+                utileria: document.getElementById('utileria').value,
+                comestible: document.getElementById('comestible').value,
+                saborEspecial: document.getElementById('saborEspecial').checked,
+                bases: document.getElementById('bases').value,
+                montaje: document.getElementById('montaje').value,
+                distancia: document.getElementById('distancia').value,
+                tipoZona: document.getElementById('tipoZona').value,
+                tempAlta: document.getElementById('tempAlta').checked,
+                total: document.getElementById('totalEstimado').textContent
+            };
+
+            localStorage.setItem('blesiu_cotizacion', JSON.stringify(datosCotizacion));
+            alert('¡Cotización guardada exitosamente en el navegador!');
+        }
+
+        // Cargar datos si existen en LocalStorage
+        function cargarCotizacionGuardada() {
+            let guardado = localStorage.getItem('blesiu_cotizacion');
+            if (guardado) {
+                let datos = JSON.parse(guardado);
+                document.getElementById('nombreCliente').value = datos.nombreCliente || '';
+                document.getElementById('fechaEvento').value = datos.fechaEvento || '';
+                document.getElementById('lugarEvento').value = datos.lugarEvento || '';
+                document.getElementById('postres').value = datos.postres || '';
+                document.getElementById('utileria').value = datos.utileria || '0';
+                document.getElementById('comestible').value = datos.comestible || '0';
+                document.getElementById('saborEspecial').checked = datos.saborEspecial || false;
+                document.getElementById('bases').value = datos.bases || '0';
+                document.getElementById('montaje').value = datos.montaje || '0';
+                document.getElementById('distancia').value = datos.distancia || '0';
+                document.getElementById('tipoZona').value = datos.tipoZona || 'local';
+                document.getElementById('tempAlta').checked = datos.tempAlta || false;
+                calcularCotizacion();
+            }
+        }
+
+        // --- FUNCIONALIDAD COMPARTIR ---
+        function compartirCotizacion() {
+            let cliente = document.getElementById('nombreCliente').value || 'Cliente';
+            let fecha = document.getElementById('fechaEvento').value || 'Por definir';
+            let total = document.getElementById('totalEstimado').textContent;
+
+            let textoMensaje = `¡Hola! Aquí tienes el resumen de tu cotización de Blesiú:\n` +
+                               `👤 Cliente: ${cliente}\n` +
+                               `📅 Fecha: ${fecha}\n` +
+                               `💰 Estimado Total: ${total}\n\n` +
+                               `Generado desde la plataforma de Blesiú.`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Cotización Blesiú',
+                    text: textoMensaje,
+                    url: window.location.href
+                }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(textoMensaje);
+                alert('Resumen copiado al portapapeles. ¡Puedes pegarlo y enviarlo por mensaje!');
+            }
+        }
+
+        // Event listeners para recalcular automáticamente
         document.querySelectorAll('#cateringForm select, #cateringForm input').forEach(element => {
             element.addEventListener('input', calcularCotizacion);
             element.addEventListener('change', calcularCotizacion);
         });
 
-        // Cálculo inicial
+        // Inicialización
+        cargarCotizacionGuardada();
         calcularCotizacion();
     </script>
 </body>
