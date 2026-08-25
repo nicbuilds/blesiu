@@ -4,27 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blesiú | Pequeños placeres para grandes momentos</title>
-    <!-- Tipografías de Google Fonts -->
+    <!-- Tipografías de Google Fonts: Playfair Display y Sans-Serif para cuerpo -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
-    <!-- Librería PDFMake (Generación vectorial directa, evita PDF en blanco) -->
+
+    <!-- Librería PDFMake (Generación vectorial directa) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 
     <style>
+        /* ==========================================
+           VARIABLES DE MARCA (Manual Blesiú)
+           ========================================== */
         :root {
-            --color-dark-brown: #48372e;
-            --color-soft-pink: #edc2bd;
-            --color-cream-bg: #fbf6f3;
-            --color-white: #ffffff;
-            --color-earth-brown: #7b5d49;
+            --color-dark-brown: #48372e;  /* Profundidad sin agresividad */
+            --color-soft-pink: #edc2bd;   /* Dulzura, feminidad y cercanía */
+            --color-cream-bg: #fbf6f3;     /* Serenidad, orden y sofisticación */
+            --color-white: #ffffff;        /* Base y contención visual */
+            --color-earth-brown: #7b5d49;  /* Artesanal, orgánico y natural */
             
             --font-heading: 'Playfair Display', serif;
             --font-body: 'Plus Jakarta Sans', sans-serif;
         }
 
+        /* Resets básicos */
         * {
             margin: 0;
             padding: 0;
@@ -43,7 +47,8 @@
             overflow-x: hidden;
         }
 
-        h1, h2, h3, h4 {
+        /* Tipografía */
+        h1, h2, h3 {
             font-family: var(--font-heading);
             font-weight: 400;
             color: var(--color-dark-brown);
@@ -54,7 +59,9 @@
             color: inherit;
         }
 
-        /* HEADER & NAV */
+        /* ==========================================
+           NAVEGACIÓN / HEADER
+           ========================================== */
         header {
             background-color: rgba(251, 246, 243, 0.95);
             backdrop-filter: blur(5px);
@@ -95,9 +102,9 @@
 
         .nav-links {
             display: flex;
-            gap: 2rem;
+            gap: 2.5rem;
             list-style: none;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             letter-spacing: 1px;
             text-transform: uppercase;
         }
@@ -110,7 +117,9 @@
             color: var(--color-soft-pink);
         }
 
-        /* HERO SECTION */
+        /* ==========================================
+           HERO SECTION
+           ========================================== */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -119,6 +128,7 @@
             padding: 8rem 2rem 4rem;
             text-align: center;
             background: linear-gradient(180deg, var(--color-cream-bg) 0%, #f4eae4 100%);
+            position: relative;
         }
 
         .hero-content {
@@ -147,6 +157,9 @@
             font-size: 1.15rem;
             color: var(--color-earth-brown);
             margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .cta-button {
@@ -159,34 +172,22 @@
             letter-spacing: 1.5px;
             text-transform: uppercase;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(72, 55, 46, 0.15);
         }
 
         .cta-button:hover {
             background-color: var(--color-earth-brown);
+            transform: translateY(-2px);
         }
 
-        /* SECCIONES DE LANDING PAGE */
-        .section-padding {
+        /* ==========================================
+           SECCIÓN SOBRE LA MARCA
+           ========================================== */
+        .about {
             padding: 6rem 2rem;
+            background-color: var(--color-white);
         }
 
-        .section-header {
-            text-align: center;
-            max-width: 600px;
-            margin: 0 auto 4rem;
-        }
-
-        .section-header h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .section-header p {
-            color: var(--color-earth-brown);
-            font-style: italic;
-        }
-
-        /* NOSOTROS */
         .about-grid {
             max-width: 1100px;
             margin: 0 auto;
@@ -196,113 +197,118 @@
             align-items: center;
         }
 
-        .about-text p {
-            margin-bottom: 1.5rem;
-            color: var(--color-earth-brown);
-        }
-
-        .about-image {
-            background-color: var(--color-soft-pink);
-            height: 400px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--color-dark-brown);
-            font-family: var(--font-heading);
-            font-size: 1.5rem;
-        }
-
-        /* SERVICIOS */
-        .services-bg {
-            background-color: #f4eae4;
-        }
-
-        .services-grid {
-            max-width: 1100px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-        }
-
-        .service-card {
-            background-color: var(--color-white);
-            padding: 2.5rem 2rem;
-            border-radius: 8px;
-            border: 1px solid rgba(237, 194, 189, 0.4);
+        .about-image-frame {
+            border: 1px solid var(--color-soft-pink);
+            padding: 1.5rem;
+            border-radius: 50% / 40%;
             text-align: center;
-            transition: transform 0.3s ease;
         }
 
-        .service-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .service-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .service-card p {
-            font-size: 0.95rem;
-            color: var(--color-earth-brown);
-        }
-
-        /* GALERÍA */
-        .gallery-grid {
-            max-width: 1100px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-        }
-
-        .gallery-item {
-            height: 250px;
-            background-color: #e5d5cb;
-            border-radius: 6px;
+        .about-image-inner {
+            background-color: var(--color-cream-bg);
+            border-radius: 50% / 40%;
+            padding: 1rem 0.5rem;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: var(--color-earth-brown);
-            font-family: var(--font-heading);
+            overflow: hidden;
         }
 
-        /* TESTIMONIOS */
-        .testimonials-bg {
-            background-color: var(--color-white);
-        }
-
-        .testimonials-grid {
-            max-width: 1000px;
+        .brand-monogram-img {
+            max-width: 100%;
+            height: auto;
+            display: block;
             margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
+            transform: scale(2.2);
         }
 
-        .testimonial-card {
-            background-color: var(--color-cream-bg);
-            padding: 2rem;
-            border-radius: 8px;
+        .about-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-text p {
+            margin-bottom: 1.2rem;
+            color: #5a4a40;
+        }
+
+        /* ==========================================
+           DESTACADOS / PRODUCTOS
+           ========================================== */
+        .featured {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            color: var(--color-earth-brown);
             font-style: italic;
         }
 
-        .testimonial-card p {
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .card {
+            background-color: var(--color-white);
+            border: 1px solid rgba(237, 194, 189, 0.4);
+            border-radius: 8px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(72, 55, 46, 0.08);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--color-soft-pink);
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-dark-brown);
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+        }
+
+        .card h3 {
+            font-size: 1.4rem;
             margin-bottom: 1rem;
         }
 
-        .testimonial-author {
-            font-style: normal;
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: var(--color-dark-brown);
+        .card p {
+            font-size: 0.95rem;
+            color: #66554b;
         }
 
-        /* SECCIÓN COTIZADOR */
+        /* ==========================================
+           COTIZADOR DE EVENTOS
+           ========================================== */
         .calculator-section {
-            background-color: var(--color-cream-bg);
+            padding: 6rem 2rem;
+            background-color: var(--color-cream-bg, #fbf6f3);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--color-dark-brown, #48372e);
             border-top: 1px solid rgba(237, 194, 189, 0.3);
         }
 
@@ -317,6 +323,7 @@
         }
 
         .calc-title {
+            font-family: 'Playfair Display', serif;
             font-size: 2.2rem;
             text-align: center;
             margin-bottom: 0.5rem;
@@ -324,7 +331,7 @@
 
         .calc-subtitle {
             text-align: center;
-            color: var(--color-earth-brown);
+            color: #7b5d49;
             margin-bottom: 2rem;
             font-style: italic;
         }
@@ -356,7 +363,7 @@
             font-weight: 600;
             letter-spacing: 1px;
             text-transform: uppercase;
-            color: var(--color-dark-brown);
+            color: #48372e;
         }
 
         select, input[type="number"], input[type="text"], input[type="date"] {
@@ -365,9 +372,14 @@
             border-radius: 6px;
             background-color: #fbf6f3;
             font-size: 0.95rem;
-            color: var(--color-dark-brown);
+            color: #48372e;
             outline: none;
+            transition: border-color 0.3s;
             font-family: inherit;
+        }
+
+        select:focus, input:focus {
+            border-color: #48372e;
         }
 
         .error-msg {
@@ -383,6 +395,12 @@
             margin-top: 0.5rem;
         }
 
+        .checkbox-group input {
+            width: 18px;
+            height: 18px;
+            accent-color: #48372e;
+        }
+
         .calc-summary {
             margin-top: 2rem;
             padding: 1.5rem;
@@ -396,7 +414,7 @@
             justify-content: space-between;
             align-items: center;
             font-size: 1.4rem;
-            font-family: var(--font-heading);
+            font-family: 'Playfair Display', serif;
             font-weight: bold;
         }
 
@@ -433,41 +451,53 @@
             color: var(--color-white);
         }
 
-        /* CONTACTO */
-        .contact-section {
-            background-color: var(--color-white);
-            text-align: center;
-        }
-
-        .contact-details {
-            max-width: 600px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            color: var(--color-earth-brown);
-        }
-
-        /* FOOTER */
+        /* ==========================================
+           FOOTER
+           ========================================== */
         footer {
             background-color: var(--color-dark-brown);
             color: var(--color-cream-bg);
-            padding: 3rem 2rem;
+            padding: 4rem 2rem 2rem;
             text-align: center;
         }
 
+        .footer-logo {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            font-style: italic;
+            margin-bottom: 0.5rem;
+            color: var(--color-soft-pink);
+        }
+
+        .footer-slogan {
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+        }
+
+        .footer-credits {
+            font-size: 0.8rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            opacity: 0.5;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            .calc-grid, .about-grid, .gallery-grid, .testimonials-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2.5rem; }
+            .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .nav-links { display: none; }
+            .calc-grid { grid-template-columns: 1fr; }
             .form-group.full-width { grid-column: span 1; }
             .calc-actions { flex-direction: column; }
-            .nav-links { display: none; }
-            .hero h1 { font-size: 2.5rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- NAV -->
+    <!-- Navegación -->
     <header>
         <div class="nav-container">
             <div class="brand-logo">
@@ -477,99 +507,66 @@
             <ul class="nav-links">
                 <li><a href="#inicio">Inicio</a></li>
                 <li><a href="#nosotros">Nosotros</a></li>
-                <li><a href="#servicios">Servicios</a></li>
-                <li><a href="#galeria">Galería</a></li>
+                <li><a href="#experiencia">Experiencia</a></li>
                 <li><a href="#cotizador">Cotizador</a></li>
-                <li><a href="#contacto">Contacto</a></li>
             </ul>
         </div>
     </header>
 
-    <!-- HERO -->
+    <!-- Sección Principal (Hero) -->
     <section class="hero" id="inicio">
         <div class="hero-content">
             <span class="badge-estd">Estd. 2012</span>
             <h1>Pequeños placeres para grandes momentos</h1>
-            <p>Descubre el refinamiento y el detalle artesanal creados para elevar cada instante de tu evento.</p>
+            <p>Descubre el refinamiento, la calidez y el detalle artesanal creados para elevar cada instante de tu día.</p>
             <a href="#cotizador" class="cta-button">Cotizar Evento</a>
         </div>
     </section>
 
-    <!-- NOSOTROS -->
-    <section class="section-padding" id="nosotros">
-        <div class="section-header">
-            <h2>Nuestra Historia</h2>
-            <p>Pasión por la alta repostería y la atención al detalle</p>
-        </div>
+    <!-- Sección Sobre la Marca -->
+    <section class="about" id="nosotros">
         <div class="about-grid">
+            <div class="about-image-frame">
+                <div class="about-image-inner">
+                    <img src="https://nicbuilds.github.io/blesiu/b1.png" alt="Blesiú Monogram" class="brand-monogram-img">
+                </div>
+            </div>
             <div class="about-text">
-                <p>Desde 2012, en Blesiú nos hemos dedicado a transformar momentos especiales en recuerdos memorables a través de la creación de mesas de postres, barras saladas y pasteles de diseño.</p>
-                <p>Creemos que cada celebración es única. Por ello, combinamos técnicas artesanales con los mejores ingredientes para ofrecer experiencias gastronómicas y visuales de alta calidad.</p>
-            </div>
-            <div class="about-image">
-                [ Imagen Blesiú ]
+                <h2>Sobriedad, refinamiento y carácter clásico</h2>
+                <p>Nuestra propuesta nace de la búsqueda de la belleza simple y bien hecha. Con proporciones armónicas y un estilo elegante sin caer en lo ornamental, creamos piezas e insumos cuidados minuciosamente.</p>
+                <p>Conectamos con lo artesanal y lo orgánico, recordando la tierra y valorando los ingredientes y materiales naturales en su forma más pura.</p>
             </div>
         </div>
     </section>
 
-    <!-- SERVICIOS -->
-    <section class="section-padding services-bg" id="servicios">
+    <!-- Sección de Experiencias / Productos -->
+    <section class="featured" id="experiencia">
         <div class="section-header">
-            <h2>Nuestros Servicios</h2>
-            <p>Soluciones a la medida para todo tipo de celebración</p>
+            <h2>Nuestra Esencia</h2>
+            <p>La delicadeza de los detalles</p>
         </div>
-        <div class="services-grid">
-            <div class="service-card">
-                <h3>Mesas de Postres</h3>
-                <p>Variedad de postres individuales montados con diseño sofisticado para deleitar a tus invitados.</p>
+        
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-icon">01</div>
+                <h3>Estilo Minimalista</h3>
+                <p>Líneas limpias y estructuras claras que permiten respirar a cada diseño con elegancia atemporal.</p>
             </div>
-            <div class="service-card">
-                <h3>Barras Saladas y Chilitos</h3>
-                <p>Opciones de chilitos, esquites y botanas preparadas con ingredientes frescos y presentación premium.</p>
+            <div class="card">
+                <div class="card-icon">02</div>
+                <h3>Origen Artesanal</h3>
+                <p>Conexión directa con procesos cuidados que honran la materia prima y el trabajo detallado.</p>
             </div>
-            <div class="service-card">
-                <h3>Pasteles Artesanales</h3>
-                <p>Diseños personalizados tanto comestibles como de utilería para el momento principal de tu evento.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- GALERÍA -->
-    <section class="section-padding" id="galeria">
-        <div class="section-header">
-            <h2>Galería</h2>
-            <p>Un vistazo a nuestros montajes y creaciones</p>
-        </div>
-        <div class="gallery-grid">
-            <div class="gallery-item">Mesa de Postres</div>
-            <div class="gallery-item">Barra de Esquites</div>
-            <div class="gallery-item">Pastel de Bodas</div>
-            <div class="gallery-item">Chilitos & Salados</div>
-            <div class="gallery-item">Montaje Temático</div>
-            <div class="gallery-item">Detalles Artesanales</div>
-        </div>
-    </section>
-
-    <!-- TESTIMONIOS -->
-    <section class="section-padding testimonials-bg">
-        <div class="section-header">
-            <h2>Testimonios</h2>
-            <p>Lo que dicen quienes han celebrado con nosotros</p>
-        </div>
-        <div class="testimonials-grid">
-            <div class="testimonial-card">
-                <p>"El montaje para nuestra boda superó nuestras expectativas. Todos los invitados quedaron encantados con la presentación y el sabor."</p>
-                <span class="testimonial-author">— Sofia & Carlos</span>
-            </div>
-            <div class="testimonial-card">
-                <p>"Excelente servicio y atención en cada detalle. La barra de esquites fue todo un éxito en la fiesta de XV años."</p>
-                <span class="testimonial-author">— Valeria M.</span>
+            <div class="card">
+                <div class="card-icon">03</div>
+                <h3>Momentos Únicos</h3>
+                <p>Creamos experiencias pensadas para acompañarte en los instantes más especiales de tu vida.</p>
             </div>
         </div>
     </section>
 
-    <!-- COTIZADOR (INTEGRADO) -->
-    <section class="section-padding calculator-section" id="cotizador">
+    <!-- Cotizador Integrado Actualizado -->
+    <section class="calculator-section" id="cotizador">
         <div class="calculator-container">
             <h2 class="calc-title">Cotiza tu Evento</h2>
             <p class="calc-subtitle">Diseña la experiencia dulce y salada para tus invitados</p>
@@ -692,23 +689,16 @@
         </div>
     </section>
 
-    <!-- CONTACTO -->
-    <section class="section-padding contact-section" id="contacto">
-        <div class="section-header">
-            <h2>Contacto</h2>
-            <p>Estamos aquí para hacer realidad tu próxima celebración</p>
-        </div>
-        <div class="contact-details">
-            <p>📍 Dirección / Zona de cobertura</p>
-            <p>📞 Teléfono / WhatsApp: (55) 1234-5678</p>
-            <p>✉️ Correo electrónico: contacto@blesiu.com</p>
-        </div>
-    </section>
-
+    <!-- Pie de página -->
     <footer>
-        <p>Blesiú • Pequeños placeres para grandes momentos • Estd. 2012</p>
+        <div class="footer-logo">Blesiú</div>
+        <p class="footer-slogan">Pequeños placeres para grandes momentos • Estd. 2012</p>
+        <div class="footer-credits">
+            &copy; 2026 Blesiú. Todos los derechos reservados.
+        </div>
     </footer>
 
+    <!-- Lógica del Cotizador -->
     <script>
         function calcularCotizacion() {
             // 1. Postres
@@ -816,7 +806,7 @@
             };
         }
 
-        // --- DESCARGAR PDF VECTORIAL ---
+        // --- GENERACIÓN DE PDF VECTORIAL CON PDFMAKE ---
         function descargarPDF() {
             let cliente = document.getElementById('nombreCliente').value || 'Cliente';
             let fecha = document.getElementById('fechaEvento').value || 'Por definir';
@@ -961,11 +951,13 @@ _Generado automáticamente desde el portal Blesiú._`;
             }
         }
 
+        // Event listeners para recalcular automáticamente al cambiar opciones
         document.querySelectorAll('#cateringForm select, #cateringForm input').forEach(element => {
             element.addEventListener('input', calcularCotizacion);
             element.addEventListener('change', calcularCotizacion);
         });
 
+        // Cálculo inicial
         calcularCotizacion();
     </script>
 </body>
