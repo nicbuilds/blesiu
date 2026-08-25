@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     
-    <!-- Librería PDFMake (Generación nativa vectorial sin canvas, no genera PDF en blanco) -->
+    <!-- Librería PDFMake (Generación vectorial directa, evita PDF en blanco) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 
@@ -31,6 +31,10 @@
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: var(--font-body);
             background-color: var(--color-cream-bg);
@@ -39,7 +43,7 @@
             overflow-x: hidden;
         }
 
-        h1, h2, h3 {
+        h1, h2, h3, h4 {
             font-family: var(--font-heading);
             font-weight: 400;
             color: var(--color-dark-brown);
@@ -50,7 +54,7 @@
             color: inherit;
         }
 
-        /* HEADER */
+        /* HEADER & NAV */
         header {
             background-color: rgba(251, 246, 243, 0.95);
             backdrop-filter: blur(5px);
@@ -91,18 +95,22 @@
 
         .nav-links {
             display: flex;
-            gap: 2.5rem;
+            gap: 2rem;
             list-style: none;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             letter-spacing: 1px;
             text-transform: uppercase;
+        }
+
+        .nav-links a {
+            transition: color 0.3s ease;
         }
 
         .nav-links a:hover {
             color: var(--color-soft-pink);
         }
 
-        /* HERO */
+        /* HERO SECTION */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -157,9 +165,143 @@
             background-color: var(--color-earth-brown);
         }
 
-        /* COTIZADOR */
-        .calculator-section {
+        /* SECCIONES DE LANDING PAGE */
+        .section-padding {
             padding: 6rem 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--color-earth-brown);
+            font-style: italic;
+        }
+
+        /* NOSOTROS */
+        .about-grid {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text p {
+            margin-bottom: 1.5rem;
+            color: var(--color-earth-brown);
+        }
+
+        .about-image {
+            background-color: var(--color-soft-pink);
+            height: 400px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-dark-brown);
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+        }
+
+        /* SERVICIOS */
+        .services-bg {
+            background-color: #f4eae4;
+        }
+
+        .services-grid {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background-color: var(--color-white);
+            padding: 2.5rem 2rem;
+            border-radius: 8px;
+            border: 1px solid rgba(237, 194, 189, 0.4);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .service-card p {
+            font-size: 0.95rem;
+            color: var(--color-earth-brown);
+        }
+
+        /* GALERÍA */
+        .gallery-grid {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .gallery-item {
+            height: 250px;
+            background-color: #e5d5cb;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-earth-brown);
+            font-family: var(--font-heading);
+        }
+
+        /* TESTIMONIOS */
+        .testimonials-bg {
+            background-color: var(--color-white);
+        }
+
+        .testimonials-grid {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background-color: var(--color-cream-bg);
+            padding: 2rem;
+            border-radius: 8px;
+            font-style: italic;
+        }
+
+        .testimonial-card p {
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-author {
+            font-style: normal;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--color-dark-brown);
+        }
+
+        /* SECCIÓN COTIZADOR */
+        .calculator-section {
             background-color: var(--color-cream-bg);
             border-top: 1px solid rgba(237, 194, 189, 0.3);
         }
@@ -291,6 +433,22 @@
             color: var(--color-white);
         }
 
+        /* CONTACTO */
+        .contact-section {
+            background-color: var(--color-white);
+            text-align: center;
+        }
+
+        .contact-details {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            color: var(--color-earth-brown);
+        }
+
+        /* FOOTER */
         footer {
             background-color: var(--color-dark-brown);
             color: var(--color-cream-bg);
@@ -299,15 +457,17 @@
         }
 
         @media (max-width: 768px) {
-            .calc-grid { grid-template-columns: 1fr; }
+            .calc-grid, .about-grid, .gallery-grid, .testimonials-grid { grid-template-columns: 1fr; }
             .form-group.full-width { grid-column: span 1; }
             .calc-actions { flex-direction: column; }
             .nav-links { display: none; }
+            .hero h1 { font-size: 2.5rem; }
         }
     </style>
 </head>
 <body>
 
+    <!-- NAV -->
     <header>
         <div class="nav-container">
             <div class="brand-logo">
@@ -316,11 +476,16 @@
             </div>
             <ul class="nav-links">
                 <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#nosotros">Nosotros</a></li>
+                <li><a href="#servicios">Servicios</a></li>
+                <li><a href="#galeria">Galería</a></li>
                 <li><a href="#cotizador">Cotizador</a></li>
+                <li><a href="#contacto">Contacto</a></li>
             </ul>
         </div>
     </header>
 
+    <!-- HERO -->
     <section class="hero" id="inicio">
         <div class="hero-content">
             <span class="badge-estd">Estd. 2012</span>
@@ -330,7 +495,81 @@
         </div>
     </section>
 
-    <section class="calculator-section" id="cotizador">
+    <!-- NOSOTROS -->
+    <section class="section-padding" id="nosotros">
+        <div class="section-header">
+            <h2>Nuestra Historia</h2>
+            <p>Pasión por la alta repostería y la atención al detalle</p>
+        </div>
+        <div class="about-grid">
+            <div class="about-text">
+                <p>Desde 2012, en Blesiú nos hemos dedicado a transformar momentos especiales en recuerdos memorables a través de la creación de mesas de postres, barras saladas y pasteles de diseño.</p>
+                <p>Creemos que cada celebración es única. Por ello, combinamos técnicas artesanales con los mejores ingredientes para ofrecer experiencias gastronómicas y visuales de alta calidad.</p>
+            </div>
+            <div class="about-image">
+                [ Imagen Blesiú ]
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICIOS -->
+    <section class="section-padding services-bg" id="servicios">
+        <div class="section-header">
+            <h2>Nuestros Servicios</h2>
+            <p>Soluciones a la medida para todo tipo de celebración</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <h3>Mesas de Postres</h3>
+                <p>Variedad de postres individuales montados con diseño sofisticado para deleitar a tus invitados.</p>
+            </div>
+            <div class="service-card">
+                <h3>Barras Saladas y Chilitos</h3>
+                <p>Opciones de chilitos, esquites y botanas preparadas con ingredientes frescos y presentación premium.</p>
+            </div>
+            <div class="service-card">
+                <h3>Pasteles Artesanales</h3>
+                <p>Diseños personalizados tanto comestibles como de utilería para el momento principal de tu evento.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALERÍA -->
+    <section class="section-padding" id="galeria">
+        <div class="section-header">
+            <h2>Galería</h2>
+            <p>Un vistazo a nuestros montajes y creaciones</p>
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item">Mesa de Postres</div>
+            <div class="gallery-item">Barra de Esquites</div>
+            <div class="gallery-item">Pastel de Bodas</div>
+            <div class="gallery-item">Chilitos & Salados</div>
+            <div class="gallery-item">Montaje Temático</div>
+            <div class="gallery-item">Detalles Artesanales</div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIOS -->
+    <section class="section-padding testimonials-bg">
+        <div class="section-header">
+            <h2>Testimonios</h2>
+            <p>Lo que dicen quienes han celebrado con nosotros</p>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <p>"El montaje para nuestra boda superó nuestras expectativas. Todos los invitados quedaron encantados con la presentación y el sabor."</p>
+                <span class="testimonial-author">— Sofia & Carlos</span>
+            </div>
+            <div class="testimonial-card">
+                <p>"Excelente servicio y atención en cada detalle. La barra de esquites fue todo un éxito en la fiesta de XV años."</p>
+                <span class="testimonial-author">— Valeria M.</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- COTIZADOR (INTEGRADO) -->
+    <section class="section-padding calculator-section" id="cotizador">
         <div class="calculator-container">
             <h2 class="calc-title">Cotiza tu Evento</h2>
             <p class="calc-subtitle">Diseña la experiencia dulce y salada para tus invitados</p>
@@ -453,6 +692,19 @@
         </div>
     </section>
 
+    <!-- CONTACTO -->
+    <section class="section-padding contact-section" id="contacto">
+        <div class="section-header">
+            <h2>Contacto</h2>
+            <p>Estamos aquí para hacer realidad tu próxima celebración</p>
+        </div>
+        <div class="contact-details">
+            <p>📍 Dirección / Zona de cobertura</p>
+            <p>📞 Teléfono / WhatsApp: (55) 1234-5678</p>
+            <p>✉️ Correo electrónico: contacto@blesiu.com</p>
+        </div>
+    </section>
+
     <footer>
         <p>Blesiú • Pequeños placeres para grandes momentos • Estd. 2012</p>
     </footer>
@@ -564,7 +816,7 @@
             };
         }
 
-        // --- GENERACIÓN DIRECTA VECTORIAL DE PDF (PDFMake) ---
+        // --- DESCARGAR PDF VECTORIAL ---
         function descargarPDF() {
             let cliente = document.getElementById('nombreCliente').value || 'Cliente';
             let fecha = document.getElementById('fechaEvento').value || 'Por definir';
