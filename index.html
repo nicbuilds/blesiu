@@ -768,29 +768,115 @@
             // Renderizar Total
             document.getElementById('totalEstimado').textContent = '$' + total.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' MXN';
 
-            return total;
+            return {
+                numPostres,
+                costoPostres,
+                costoUtileria,
+                costoComestible,
+                costoBases,
+                costoMontaje,
+                costoFlete,
+                total
+            };
         }
 
-        // --- FUNCIONALIDAD PDF ---
+        // --- FUNCIONALIDAD PDF CORREGIDA ---
         function descargarPDF() {
             let cliente = document.getElementById('nombreCliente').value || 'Cliente';
-            let elemento = document.getElementById('cotizadorPrintContainer');
+            let fecha = document.getElementById('fechaEvento').value || 'Por definir';
+            let lugar = document.getElementById('lugarEvento').value || 'Por definir';
+
+            let utileriaText = document.getElementById('utileria').options[document.getElementById('utileria').selectedIndex].text;
+            let comestibleText = document.getElementById('comestible').options[document.getElementById('comestible').selectedIndex].text;
+            let basesText = document.getElementById('bases').options[document.getElementById('bases').selectedIndex].text;
+            let montajeText = document.getElementById('montaje').options[document.getElementById('montaje').selectedIndex].text;
             
+            let data = calcularCotizacion();
+
+            // Construcción de la plantilla del PDF con diseño limpio
+            let pdfContainer = document.createElement('div');
+            pdfContainer.style.padding = '40px';
+            pdfContainer.style.fontFamily = "'Helvetica Neue', Helvetica, Arial, sans-serif";
+            pdfContainer.style.color = '#48372e';
+            pdfContainer.style.backgroundColor = '#ffffff';
+
+            pdfContainer.innerHTML = `
+                <div style="text-align: center; border-bottom: 2px solid #edc2bd; padding-bottom: 20px; margin-bottom: 30px;">
+                    <h1 style="font-family: 'Times New Roman', serif; font-size: 32px; margin: 0; color: #48372e;">BLESIÚ</h1>
+                    <p style="font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-top: 5px; color: #7b5d49;">Pequeños placeres para grandes momentos • Estd. 2012</p>
+                </div>
+
+                <h2 style="font-size: 20px; text-align: center; margin-bottom: 25px; color: #48372e;">RESUMEN DE COTIZACIÓN</h2>
+
+                <table style="width: 100%; margin-bottom: 30px; border-collapse: collapse; font-size: 14px;">
+                    <tr>
+                        <td style="padding: 6px 0; font-weight: bold; width: 120px;">Cliente:</td>
+                        <td style="padding: 6px 0;">${cliente}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 6px 0; font-weight: bold;">Fecha Evento:</td>
+                        <td style="padding: 6px 0;">${fecha}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 6px 0; font-weight: bold;">Lugar / Ubicación:</td>
+                        <td style="padding: 6px 0;">${lugar}</td>
+                    </tr>
+                </table>
+
+                <table style="width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 30px;">
+                    <thead>
+                        <tr style="background-color: #fbf6f3; border-bottom: 1px solid #edc2bd;">
+                            <th style="padding: 10px; text-align: left; color: #48372e;">Concepto</th>
+                            <th style="padding: 10px; text-align: right; color: #48372e;">Importe</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 10px;">Postres individuales (${data.numPostres} piezas)</td>
+                            <td style="padding: 10px; text-align: right;">$${data.costoPostres.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 10px;">Pastel de Utilería: ${utileriaText}</td>
+                            <td style="padding: 10px; text-align: right;">$${data.costoUtileria.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 10px;">Pastel Comestible: ${comestibleText} ${document.getElementById('saborEspecial').checked ? '(Con Sabor Especial)' : ''}</td>
+                            <td style="padding: 10px; text-align: right;">$${data.costoComestible.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 10px;">Renta de Bases: ${basesText}</td>
+                            <td style="padding: 10px; text-align: right;">$${data.costoBases.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 10px;">Servicio de Montaje: ${montajeText}</td>
+                            <td style="padding: 10px; text-align: right;">$${data.costoMontaje.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 10px;">Flete y Traslado (${document.getElementById('distancia').value || 0} km - ${document.getElementById('tipoZona').value}) ${document.getElementById('tempAlta').checked ? '(Alta temp.)' : ''}</td>
+                            <td style="padding: 10px; text-align: right;">$${data.costoFlete.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="background-color: #fbf6f3; padding: 15px; border-left: 4px solid #edc2bd; display: flex; justify-content: space-between; font-size: 18px; font-weight: bold;">
+                    <span>ESTIMADO TOTAL:</span>
+                    <span>$${data.total.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</span>
+                </div>
+
+                <div style="margin-top: 50px; text-align: center; font-size: 11px; color: #7b5d49; border-top: 1px dashed #edc2bd; padding-top: 15px;">
+                    Este documento es una estimación de presupuesto generada en línea. Sujeta a confirmación de disponibilidad.
+                </div>
+            `;
+
             let opt = {
                 margin:       [0.5, 0.5, 0.5, 0.5],
                 filename:     `Cotizacion_Blesiu_${cliente.replace(/\s+/g, '_')}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
+                html2canvas:  { scale: 2, useCORS: true },
                 jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
             };
 
-            // Ocultar botones temporalmente al imprimir PDF
-            let acciones = document.querySelector('.calc-actions');
-            acciones.style.display = 'none';
-
-            html2pdf().set(opt).from(elemento).save().then(() => {
-                acciones.style.display = 'flex';
-            });
+            html2pdf().set(opt).from(pdfContainer).save();
         }
 
         // --- FUNCIONALIDAD GUARDAR LOCALMENTE ---
