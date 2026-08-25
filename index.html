@@ -3,1024 +3,444 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blesiú | Pequeños placeres para grandes momentos</title>
-    <!-- Tipografías de Google Fonts: Playfair Display y Sans-Serif para cuerpo -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
-    <!-- Librería para generar PDFs cliente -->
+    <title>Cotizador BLESIÚ</title>
+    <!-- html2pdf bundle CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
     <style>
-        /* ==========================================
-           VARIABLES DE MARCA (Manual Blesiú)
-           ========================================== */
         :root {
-            --color-dark-brown: #48372e;  /* Profundidad sin agresividad */
-            --color-soft-pink: #edc2bd;   /* Dulzura, feminidad y cercanía */
-            --color-cream-bg: #fbf6f3;     /* Serenidad, orden y sofisticación */
-            --color-white: #ffffff;        /* Base y contención visual */
-            --color-earth-brown: #7b5d49;  /* Artesanal, orgánico y natural */
-            
-            --font-heading: 'Playfair Display', serif;
-            --font-body: 'Plus Jakarta Sans', sans-serif;
-        }
-
-        /* Resets básicos */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            --rosa-pastel: #edc2bd;
+            --cafe-suave: #48372e;
+            --cafe-claro: #7b5d49;
+            --fondo: #fbf6f3;
+            --blanco: #ffffff;
         }
 
         body {
-            font-family: var(--font-body);
-            background-color: var(--color-cream-bg);
-            color: var(--color-dark-brown);
-            line-height: 1.6;
-            overflow-x: hidden;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--fondo);
+            color: var(--cafe-suave);
+            margin: 0;
+            padding: 20px;
         }
 
-        /* Tipografía */
-        h1, h2, h3 {
-            font-family: var(--font-heading);
-            font-weight: 400;
-            color: var(--color-dark-brown);
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        /* ==========================================
-           NAVEGACIÓN / HEADER
-           ========================================== */
-        header {
-            background-color: rgba(251, 246, 243, 0.95);
-            backdrop-filter: blur(5px);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid rgba(72, 55, 46, 0.08);
-        }
-
-        .nav-container {
-            max-width: 1200px;
+        .container {
+            max-width: 800px;
             margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.2rem 2rem;
+            background: var(--blanco);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
-        .brand-logo {
-            font-family: var(--font-heading);
-            font-size: 1.8rem;
-            font-style: italic;
-            color: var(--color-dark-brown);
-            letter-spacing: 1px;
+        header {
+            text-align: center;
+            border-bottom: 2px solid var(--rosa-pastel);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
         }
 
-        .brand-logo span {
-            display: block;
-            font-family: var(--font-body);
-            font-size: 0.65rem;
-            font-style: normal;
+        h1 {
+            font-family: 'Times New Roman', serif;
+            font-size: 36px;
+            margin: 0;
+            color: var(--cafe-suave);
+        }
+
+        .subtitle {
+            font-size: 12px;
             letter-spacing: 2px;
             text-transform: uppercase;
-            text-align: center;
-            color: var(--color-earth-brown);
+            color: var(--cafe-claro);
+            margin-top: 5px;
         }
 
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
-            list-style: none;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+        .form-section {
+            margin-bottom: 20px;
         }
 
-        .nav-links a {
-            transition: color 0.3s ease;
+        .form-section h3 {
+            border-bottom: 1px solid var(--rosa-pastel);
+            padding-bottom: 5px;
+            color: var(--cafe-claro);
         }
 
-        .nav-links a:hover {
-            color: var(--color-soft-pink);
-        }
-
-        /* ==========================================
-           HERO SECTION
-           ========================================== */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 8rem 2rem 4rem;
-            text-align: center;
-            background: linear-gradient(180deg, var(--color-cream-bg) 0%, #f4eae4 100%);
-            position: relative;
-        }
-
-        .hero-content {
-            max-width: 800px;
-        }
-
-        .badge-estd {
-            display: inline-block;
-            border: 1px solid var(--color-earth-brown);
-            padding: 0.4rem 1.2rem;
-            border-radius: 50px;
-            font-size: 0.75rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--color-earth-brown);
-            margin-bottom: 2rem;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            line-height: 1.2;
-            margin-bottom: 1.5rem;
-        }
-
-        .hero p {
-            font-size: 1.15rem;
-            color: var(--color-earth-brown);
-            margin-bottom: 2.5rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .cta-button {
-            display: inline-block;
-            background-color: var(--color-dark-brown);
-            color: var(--color-white);
-            padding: 1rem 2.5rem;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(72, 55, 46, 0.15);
-        }
-
-        .cta-button:hover {
-            background-color: var(--color-earth-brown);
-            transform: translateY(-2px);
-        }
-
-        /* ==========================================
-           SECCIÓN SOBRE LA MARCA
-           ========================================== */
-        .about {
-            padding: 6rem 2rem;
-            background-color: var(--color-white);
-        }
-
-        .about-grid {
-            max-width: 1100px;
-            margin: 0 auto;
+        .grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .about-image-frame {
-            border: 1px solid var(--color-soft-pink);
-            padding: 1.5rem;
-            border-radius: 50% / 40%;
-            text-align: center;
-        }
-
-        .about-image-inner {
-            background-color: var(--color-cream-bg);
-            border-radius: 50% / 40%;
-            padding: 1rem 0.5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .brand-monogram-img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-            transform: scale(2.2);
-        }
-
-        .about-text h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .about-text p {
-            margin-bottom: 1.2rem;
-            color: #5a4a40;
-        }
-
-        /* ==========================================
-           DESTACADOS / PRODUCTOS
-           ========================================== */
-        .featured {
-            padding: 6rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .section-header h2 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .section-header p {
-            color: var(--color-earth-brown);
-            font-style: italic;
-        }
-
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2.5rem;
-        }
-
-        .card {
-            background-color: var(--color-white);
-            border: 1px solid rgba(237, 194, 189, 0.4);
-            border-radius: 8px;
-            padding: 2.5rem 2rem;
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(72, 55, 46, 0.08);
-        }
-
-        .card-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background-color: var(--color-soft-pink);
-            margin: 0 auto 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--color-dark-brown);
-            font-family: var(--font-heading);
-            font-size: 1.5rem;
-        }
-
-        .card h3 {
-            font-size: 1.4rem;
-            margin-bottom: 1rem;
-        }
-
-        .card p {
-            font-size: 0.95rem;
-            color: #66554b;
-        }
-
-        /* ==========================================
-           COTIZADOR DE EVENTOS (Estilo Blesiú)
-           ========================================== */
-        .calculator-section {
-            padding: 6rem 2rem;
-            background-color: var(--color-cream-bg, #fbf6f3);
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            color: var(--color-dark-brown, #48372e);
-            border-top: 1px solid rgba(237, 194, 189, 0.3);
-        }
-
-        .calculator-container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: #ffffff;
-            border: 1px solid rgba(237, 194, 189, 0.5);
-            border-radius: 12px;
-            padding: 2.5rem;
-            box-shadow: 0 10px 30px rgba(72, 55, 46, 0.05);
-        }
-
-        .calc-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.2rem;
-            text-align: center;
-            margin-bottom: 0.5rem;
-        }
-
-        .calc-subtitle {
-            text-align: center;
-            color: #7b5d49;
-            margin-bottom: 2rem;
-            font-style: italic;
-        }
-
-        .calc-divider {
-            border: 0;
-            border-top: 1px dashed #edc2bd;
-            margin: 1.5rem 0;
-        }
-
-        .calc-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .form-group.full-width {
-            grid-column: span 2;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
         }
 
         label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: #48372e;
+            display: block;
+            font-weight: bold;
+            font-size: 13px;
+            margin-bottom: 5px;
         }
 
-        select, input[type="number"], input[type="text"], input[type="date"] {
-            padding: 0.8rem 1rem;
-            border: 1px solid #edc2bd;
+        input[type="text"], input[type="date"], input[type="number"], select {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #ddd;
             border-radius: 6px;
-            background-color: #fbf6f3;
-            font-size: 0.95rem;
-            color: #48372e;
-            outline: none;
-            transition: border-color 0.3s;
-            font-family: inherit;
-        }
-
-        select:focus, input[type="number"]:focus, input[type="text"]:focus, input[type="date"]:focus {
-            border-color: #48372e;
-        }
-
-        .error-msg {
-            font-size: 0.8rem;
-            color: #c0392b;
-            margin-top: 0.2rem;
-            display: none;
+            box-sizing: border-box;
+            font-size: 14px;
         }
 
         .checkbox-group {
             display: flex;
             align-items: center;
-            gap: 0.8rem;
-            margin-top: 0.5rem;
+            gap: 8px;
+            margin-top: 10px;
         }
 
         .checkbox-group input {
-            width: 18px;
-            height: 18px;
-            accent-color: #48372e;
+            width: auto;
         }
 
-        /* Resumen de Cotización y Botones */
-        .calc-summary {
-            margin-top: 2rem;
-            padding: 1.5rem;
-            background-color: #fbf6f3;
-            border-radius: 8px;
-            border-left: 4px solid #edc2bd;
-        }
-
-        .summary-total {
+        .total-box {
+            background-color: var(--fondo);
+            padding: 20px;
+            border-left: 5px solid var(--rosa-pastel);
+            margin-top: 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 1.4rem;
-            font-family: 'Playfair Display', serif;
+            font-size: 20px;
             font-weight: bold;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px dashed #edc2bd;
         }
 
-        .calc-actions {
+        .actions {
+            margin-top: 25px;
             display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
-            flex-wrap: wrap;
+            gap: 15px;
         }
 
-        .btn-action {
+        button {
             flex: 1;
-            min-width: 160px;
-            padding: 0.8rem 1.2rem;
-            border: 1px solid var(--color-dark-brown);
+            padding: 12px;
+            border: none;
             border-radius: 6px;
-            background-color: transparent;
-            color: var(--color-dark-brown);
-            font-size: 0.85rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            font-size: 15px;
+            font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
+            transition: background 0.2s;
         }
 
-        .btn-action:hover {
-            background-color: var(--color-earth-brown);
-            border-color: var(--color-earth-brown);
-            color: var(--color-white);
+        .btn-calc {
+            background-color: var(--cafe-suave);
+            color: var(--blanco);
         }
 
-        .btn-action.btn-primary-action {
-            background-color: var(--color-dark-brown);
-            color: var(--color-white);
+        .btn-calc:hover {
+            background-color: var(--cafe-claro);
         }
 
-        .btn-action.btn-primary-action:hover {
-            background-color: var(--color-earth-brown);
+        .btn-pdf {
+            background-color: var(--rosa-pastel);
+            color: var(--cafe-suave);
         }
 
-        /* ==========================================
-           FOOTER
-           ========================================== */
-        footer {
-            background-color: var(--color-dark-brown);
-            color: var(--color-cream-bg);
-            padding: 4rem 2rem 2rem;
-            text-align: center;
-        }
-
-        .footer-logo {
-            font-family: var(--font-heading);
-            font-size: 2rem;
-            font-style: italic;
-            margin-bottom: 0.5rem;
-            color: var(--color-soft-pink);
-        }
-
-        .footer-slogan {
-            font-size: 0.85rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 2rem;
-            opacity: 0.8;
-        }
-
-        .footer-credits {
-            font-size: 0.8rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 2rem;
-            opacity: 0.5;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5rem; }
-            .about-grid { grid-template-columns: 1fr; gap: 2rem; }
-            .nav-links { display: none; }
-            .calc-grid { grid-template-columns: 1fr; }
-            .form-group.full-width { grid-column: span 1; }
-            .calc-actions { flex-direction: column; }
+        .btn-pdf:hover {
+            background-color: #e2b2ac;
         }
     </style>
 </head>
 <body>
 
-    <!-- Navegación -->
+<div class="container">
     <header>
-        <div class="nav-container">
-            <div class="brand-logo">
-                Blesiú
-                <span>ESTD. 2012</span>
-            </div>
-            <ul class="nav-links">
-                <li><a href="#inicio">Inicio</a></li>
-                <li><a href="#nosotros">Nosotros</a></li>
-                <li><a href="#experiencia">Experiencia</a></li>
-                <li><a href="#cotizador">Cotizador</a></li>
-            </ul>
-        </div>
+        <h1>BLESIÚ</h1>
+        <div class="subtitle">Pequeños placeres para grandes momentos • Estd. 2012</div>
     </header>
 
-    <!-- Sección Principal (Hero) -->
-    <section class="hero" id="inicio">
-        <div class="hero-content">
-            <span class="badge-estd">Estd. 2012</span>
-            <h1>Pequeños placeres para grandes momentos</h1>
-            <p>Descubre el refinamiento, la calidez y el detalle artesanal creados para elevar cada instante de tu día.</p>
-            <a href="#cotizador" class="cta-button">Cotizar Evento</a>
+    <div class="form-section">
+        <h3>Datos del Cliente</h3>
+        <div class="grid">
+            <div>
+                <label for="nombreCliente">Nombre del Cliente</label>
+                <input type="text" id="nombreCliente" placeholder="Ej. Maria Lopez">
+            </div>
+            <div>
+                <label for="fechaEvento">Fecha del Evento</label>
+                <input type="date" id="fechaEvento">
+            </div>
+            <div>
+                <label for="lugarEvento">Lugar / Ubicación</label>
+                <input type="text" id="lugarEvento" placeholder="Ej. Jardín del Sol">
+            </div>
         </div>
-    </section>
+    </div>
 
-    <!-- Sección Sobre la Marca -->
-    <section class="about" id="nosotros">
-        <div class="about-grid">
-            <div class="about-image-frame">
-                <div class="about-image-inner">
-                    <img src="https://nicbuilds.github.io/blesiu/b1.png" alt="Blesiú Monogram" class="brand-monogram-img">
-                    <span style="letter-spacing: 3px; font-size: 0.8rem; margin-top: 1rem; color: var(--color-earth-brown);">DESDE 2012</span>
+    <div class="form-section">
+        <h3>Productos y Servicios</h3>
+        <div class="grid">
+            <div>
+                <label for="numPostres">Postres Individuales (Piezas)</label>
+                <input type="number" id="numPostres" value="0" min="0">
+            </div>
+            <div>
+                <label for="numChilitos">Chilitos y Salados (Piezas)</label>
+                <input type="number" id="numChilitos" value="0" min="0">
+            </div>
+            <div>
+                <label for="numEsquites">Barra Esquites/Maruchan (Unidades)</label>
+                <input type="number" id="numEsquites" value="0" min="0">
+            </div>
+        </div>
+
+        <div class="grid" style="margin-top: 15px;">
+            <div>
+                <label for="utileria">Pastel de Utilería</label>
+                <select id="utileria">
+                    <option value="0">Ninguno</option>
+                    <option value="500">Sencillo ($500)</option>
+                    <option value="900">Especial ($900)</option>
+                </select>
+            </div>
+            <div>
+                <label for="comestible">Pastel Comestible</label>
+                <select id="comestible">
+                    <option value="0">Ninguno</option>
+                    <option value="800">1 Piso - 15 personas ($800)</option>
+                    <option value="1500">2 Pisos - 30 personas ($1,500)</option>
+                    <option value="2200">3 Pisos - 50 personas ($2,200)</option>
+                </select>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="saborEspecial">
+                    <label for="saborEspecial" style="font-weight: normal;">Sabor Especial (+ $150)</label>
                 </div>
             </div>
-            <div class="about-text">
-                <h2>Sobriedad, refinamiento y carácter clásico</h2>
-                <p>Nuestra propuesta nace de la búsqueda de la belleza simple y bien hecha. Con proporciones armónicas y un estilo elegante sin caer en lo ornamental, creamos piezas e insumos cuidados minuciosamente.</p>
-                <p>Conectamos con lo artesanal y lo orgánico, recordando la tierra y valorando los ingredientes y materiales naturales en su forma más pura.</p>
+            <div>
+                <label for="bases">Renta de Bases</label>
+                <select id="bases">
+                    <option value="0">Sin Renta</option>
+                    <option value="300">Set Básico ($300)</option>
+                    <option value="600">Set Premium ($600)</option>
+                </select>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- Sección de Experiencias / Productos -->
-    <section class="featured" id="experiencia">
-        <div class="section-header">
-            <h2>Nuestra Esencia</h2>
-            <p>La delicadeza de los detalles</p>
+    <div class="form-section">
+        <h3>Montaje y Logística</h3>
+        <div class="grid">
+            <div>
+                <label for="montaje">Servicio de Montaje</label>
+                <select id="montaje">
+                    <option value="0">Sin Montaje</option>
+                    <option value="400">Montaje Básico ($400)</option>
+                    <option value="800">Montaje Completo Decorado ($800)</option>
+                </select>
+            </div>
+            <div>
+                <label for="distancia">Distancia Traslado (KM)</label>
+                <input type="number" id="distancia" value="0" min="0">
+            </div>
+            <div>
+                <label for="tipoZona">Tipo de Zona</label>
+                <select id="tipoZona">
+                    <option value="urbana">Urbana</option>
+                    <option value="foranea">Foránea (+ $200)</option>
+                </select>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="tempAlta">
+                    <label for="tempAlta" style="font-weight: normal;">Alta Temp / Refrigerado (+ $100)</label>
+                </div>
+            </div>
         </div>
+    </div>
+
+    <div class="total-box">
+        <span>ESTIMADO TOTAL:</span>
+        <span id="totalDisplay">$0.00 MXN</span>
+    </div>
+
+    <div class="actions">
+        <button class="btn-calc" onclick="actualizarTotalUI()">Calcular Cotización</button>
+        <button class="btn-pdf" onclick="descargarPDF()">Descargar PDF</button>
+    </div>
+</div>
+
+<script>
+    // Precios Unitarios
+    const PRECIO_POSTRE = 25;
+    const PRECIO_CHILITO = 20;
+    const PRECIO_ESQUITE = 35;
+    const COSTO_POR_KM = 15;
+
+    function calcularCotizacion() {
+        let numPostres = parseInt(document.getElementById('numPostres').value) || 0;
+        let numChilitos = parseInt(document.getElementById('numChilitos').value) || 0;
+        let numEsquites = parseInt(document.getElementById('numEsquites').value) || 0;
+
+        let costoPostres = numPostres * PRECIO_POSTRE;
+        let costoChilitos = numChilitos * PRECIO_CHILITO;
+        let costoEsquites = numEsquites * PRECIO_ESQUITE;
+
+        let costoUtileria = parseFloat(document.getElementById('utileria').value) || 0;
         
-        <div class="cards-grid">
-            <div class="card">
-                <div class="card-icon">01</div>
-                <h3>Estilo Minimalista</h3>
-                <p>Líneas limpias y estructuras claras que permiten respirar a cada diseño con elegancia atemporal.</p>
+        let costoComestible = parseFloat(document.getElementById('comestible').value) || 0;
+        if (costoComestible > 0 && document.getElementById('saborEspecial').checked) {
+            costoComestible += 150;
+        }
+
+        let costoBases = parseFloat(document.getElementById('bases').value) || 0;
+        let costoMontaje = parseFloat(document.getElementById('montaje').value) || 0;
+
+        let km = parseFloat(document.getElementById('distancia').value) || 0;
+        let costoFlete = km * COSTO_POR_KM;
+        if (document.getElementById('tipoZona').value === 'foranea') {
+            costoFlete += 200;
+        }
+        if (document.getElementById('tempAlta').checked) {
+            costoFlete += 100;
+        }
+
+        let total = costoPostres + costoChilitos + costoEsquites + costoUtileria + 
+                    costoComestible + costoBases + costoMontaje + costoFlete;
+
+        return {
+            numPostres, costoPostres,
+            numChilitos, costoChilitos,
+            numEsquites, costoEsquites,
+            costoUtileria,
+            costoComestible,
+            costoBases,
+            costoMontaje,
+            costoFlete,
+            total
+        };
+    }
+
+    function actualizarTotalUI() {
+        let data = calcularCotizacion();
+        document.getElementById('totalDisplay').innerText = `$${data.total.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`;
+    }
+
+    function descargarPDF() {
+        let cliente = document.getElementById('nombreCliente').value || 'Cliente';
+        let fecha = document.getElementById('fechaEvento').value || 'Por definir';
+        let lugar = document.getElementById('lugarEvento').value || 'Por definir';
+
+        let utileriaText = document.getElementById('utileria').options[document.getElementById('utileria').selectedIndex].text;
+        let comestibleText = document.getElementById('comestible').options[document.getElementById('comestible').selectedIndex].text;
+        let basesText = document.getElementById('bases').options[document.getElementById('bases').selectedIndex].text;
+        let montajeText = document.getElementById('montaje').options[document.getElementById('montaje').selectedIndex].text;
+        
+        let data = calcularCotizacion();
+
+        // 1. Crear contenedor temporal
+        let pdfContainer = document.createElement('div');
+        
+        // Asignar estilos explícitos de renderizado
+        pdfContainer.style.width = '750px';
+        pdfContainer.style.padding = '40px';
+        pdfContainer.style.fontFamily = "'Helvetica Neue', Helvetica, Arial, sans-serif";
+        pdfContainer.style.color = '#48372e';
+        pdfContainer.style.backgroundColor = '#ffffff';
+        pdfContainer.style.position = 'fixed';
+        pdfContainer.style.left = '-9999px';
+        pdfContainer.style.top = '0';
+        pdfContainer.style.zIndex = '-1000';
+
+        pdfContainer.innerHTML = `
+            <div style="text-align: center; border-bottom: 2px solid #edc2bd; padding-bottom: 20px; margin-bottom: 30px;">
+                <h1 style="font-family: 'Times New Roman', serif; font-size: 32px; margin: 0; color: #48372e;">BLESIÚ</h1>
+                <p style="font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-top: 5px; color: #7b5d49;">Pequeños placeres para grandes momentos • Estd. 2012</p>
             </div>
-            <div class="card">
-                <div class="card-icon">02</div>
-                <h3>Origen Artesanal</h3>
-                <p>Conexión directa con procesos cuidados que honran la materia prima y el trabajo detallado.</p>
+
+            <h2 style="font-size: 20px; text-align: center; margin-bottom: 25px; color: #48372e;">RESUMEN DE COTIZACIÓN</h2>
+
+            <table style="width: 100%; margin-bottom: 30px; border-collapse: collapse; font-size: 14px;">
+                <tr>
+                    <td style="padding: 6px 0; font-weight: bold; width: 140px;">Cliente:</td>
+                    <td style="padding: 6px 0;">${cliente}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 6px 0; font-weight: bold;">Fecha Evento:</td>
+                    <td style="padding: 6px 0;">${fecha}</td>
+                </tr>
+                <tr>
+                    <td style="padding: 6px 0; font-weight: bold;">Lugar / Ubicación:</td>
+                    <td style="padding: 6px 0;">${lugar}</td>
+                </tr>
+            </table>
+
+            <table style="width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 30px;">
+                <thead>
+                    <tr style="background-color: #fbf6f3; border-bottom: 1px solid #edc2bd;">
+                        <th style="padding: 10px; text-align: left; color: #48372e;">Concepto</th>
+                        <th style="padding: 10px; text-align: right; color: #48372e;">Importe</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 10px;">Postres individuales (${data.numPostres} piezas)</td>
+                        <td style="padding: 10px; text-align: right;">$${data.costoPostres.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 10px;">Chilitos y Salados (${data.numChilitos} piezas)</td>
+                        <td style="padding: 10px; text-align: right;">$${data.costoChilitos.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 10px;">Barra de Esquites / Maruchan / Tostilocos (${data.numEsquites} unidades)</td>
+                        <td style="padding: 10px; text-align: right;">$${data.costoEsquites.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 10px;">Pastel de Utilería: ${utileriaText}</td>
+                        <td style="padding: 10px; text-align: right;">$${data.costoUtileria.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 10px;">Pastel Comestible: ${comestibleText} ${document.getElementById('saborEspecial').checked ? '(Con Sabor Especial)' : ''}</td>
+                        <td style="padding: 10px; text-align: right;">$${data.costoComestible.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 10px;">Renta de Bases: ${basesText}</td>
+                        <td style="padding: 10px; text-align: right;">$${data.costoBases.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 10px;">Servicio de Montaje: ${montajeText}</td>
+                        <td style="padding: 10px; text-align: right;">$${data.costoMontaje.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 10px;">Flete y Traslado (${document.getElementById('distancia').value || 0} km - ${document.getElementById('tipoZona').value}) ${document.getElementById('tempAlta').checked ? '(Alta temp.)' : ''}</td>
+                        <td style="padding: 10px; text-align: right;">$${data.costoFlete.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div style="background-color: #fbf6f3; padding: 15px; border-left: 4px solid #edc2bd; display: flex; justify-content: space-between; font-size: 18px; font-weight: bold;">
+                <span>ESTIMADO TOTAL:</span>
+                <span>$${data.total.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</span>
             </div>
-            <div class="card">
-                <div class="card-icon">03</div>
-                <h3>Momentos Únicos</h3>
-                <p>Creamos experiencias pensadas para acompañarte en los instantes más especiales de tu vida.</p>
+
+            <div style="margin-top: 50px; text-align: center; font-size: 11px; color: #7b5d49; border-top: 1px dashed #edc2bd; padding-top: 15px;">
+                Este documento es una estimación de presupuesto generada en línea. Sujeta a confirmación de disponibilidad.
             </div>
-        </div>
-    </section>
+        `;
 
-    <!-- Sección del Cotizador -->
-    <section class="calculator-section" id="cotizador">
-        <div class="calculator-container" id="cotizadorPrintContainer">
-            <h2 class="calc-title">Cotiza tu Evento</h2>
-            <p class="calc-subtitle">Diseña la experiencia dulce y salada para tus invitados</p>
+        // 2. Insertar obligatoriamente al body para renderizado
+        document.body.appendChild(pdfContainer);
 
-            <form id="cateringForm">
-                <!-- Datos del Cliente / Evento -->
-                <div class="calc-grid">
-                    <div class="form-group full-width">
-                        <label for="nombreCliente">Nombre del Cliente</label>
-                        <input type="text" id="nombreCliente" placeholder="Ej. María García">
-                    </div>
+        let opt = {
+            margin:       0.4,
+            filename:     `Cotizacion_Blesiu_${cliente.replace(/\s+/g, '_')}.pdf`,
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true, scrollY: 0, scrollX: 0 },
+            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
 
-                    <div class="form-group">
-                        <label for="fechaEvento">Fecha del Evento</label>
-                        <input type="date" id="fechaEvento">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="lugarEvento">Lugar / Dirección del Evento</label>
-                        <input type="text" id="lugarEvento" placeholder="Ej. Jardín Las Rosas, Salón B">
-                    </div>
-                </div>
-
-                <hr class="calc-divider">
-
-                <!-- Opciones de Cotización -->
-                <div class="calc-grid">
-                    <!-- Cantidad de Postres -->
-                    <div class="form-group">
-                        <label for="postres">Cantidad de Postres ($23 c/u)</label>
-                        <input type="number" id="postres" min="60" max="5000" placeholder="Mínimo 60, máximo 5000">
-                        <span id="postresError" class="error-msg">Ingresa entre 60 y 5000 piezas.</span>
-                    </div>
-
-                    <!-- Cantidad de Chilitos y Salados -->
-                    <div class="form-group">
-                        <label for="chilitos">Chilitos y Salados ($23 c/u)</label>
-                        <input type="number" id="chilitos" min="60" max="5000" placeholder="Mínimo 60, máximo 5000">
-                        <span id="chilitosError" class="error-msg">Ingresa entre 60 y 5000 piezas.</span>
-                    </div>
-
-                    <!-- Barra de Esquites / Maruchan / Tostilocos -->
-                    <div class="form-group full-width">
-                        <label for="barraEsquites">Barra de Esquites / Maruchan / Tostilocos ($6,900 x 300 pzs | +$23 pza extra)</label>
-                        <input type="number" id="barraEsquites" min="300" max="5000" placeholder="Mínimo 300, máximo 5000 unidades">
-                        <span id="esquitesError" class="error-msg">Ingresa entre 300 y 5000 unidades.</span>
-                    </div>
-
-                    <!-- Pastel Utilería -->
-                    <div class="form-group">
-                        <label for="utileria">Pastel de Utilería</label>
-                        <select id="utileria">
-                            <option value="0">Sin pastel de utilería</option>
-                            <option value="2200">2 Pisos ($2,200)</option>
-                            <option value="2600">3 Pisos ($2,600)</option>
-                        </select>
-                    </div>
-
-                    <!-- Pastel Comestible -->
-                    <div class="form-group">
-                        <label for="comestible">Pastel Comestible</label>
-                        <select id="comestible">
-                            <option value="0" data-personas="0">Sin pastel comestible</option>
-                            <option value="1350" data-personas="50">50 personas ($1,350)</option>
-                            <option value="2450" data-personas="100">100 personas ($2,450)</option>
-                            <option value="3800" data-personas="150">150 personas ($3,800)</option>
-                        </select>
-                    </div>
-
-                    <!-- Sabor Especial -->
-                    <div class="form-group">
-                        <label>Opciones de Sabor</label>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="saborEspecial">
-                            <label for="saborEspecial" style="text-transform:none; font-weight:normal;">Sabor Especial (+$5 por persona)</label>
-                        </div>
-                    </div>
-
-                    <!-- Logística y Montaje -->
-                    <div class="form-group">
-                        <label for="bases">Bases para postres</label>
-                        <select id="bases">
-                            <option value="0">Sin renta de bases</option>
-                            <option value="1400">Incluir bases ($1,400)</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="montaje">Servicio de Montaje</label>
-                        <select id="montaje">
-                            <option value="0">Sin montaje</option>
-                            <option value="3500">Montaje profesional ($3,500)</option>
-                        </select>
-                    </div>
-
-                    <!-- Flete -->
-                    <div class="form-group">
-                        <label for="distancia">Distancia de entrega (km)</label>
-                        <input type="number" id="distancia" min="0" value="0" placeholder="Ej. 15">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="tipoZona">Tipo de Zona</label>
-                        <select id="tipoZona">
-                            <option value="local">Local</option>
-                            <option value="foraneo">Foráneo ($35 x km)</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group full-width">
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="tempAlta">
-                            <label for="tempAlta" style="text-transform:none; font-weight:normal;">Entrega en zona/temporada de Alta Temperatura (+$40 adicionales)</label>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Resumen y Total -->
-                <div class="calc-summary">
-                    <div class="summary-total">
-                        <span>Estimado Total:</span>
-                        <span id="totalEstimado">$0.00 MXN</span>
-                    </div>
-                </div>
-
-                <!-- Botones de Acción (PDF, Guardar y Compartir) -->
-                <div class="calc-actions">
-                    <button type="button" class="btn-action btn-primary-action" onclick="descargarPDF()">Descargar PDF</button>
-                    <button type="button" class="btn-action" onclick="guardarCotizacion()">Guardar Datos</button>
-                    <button type="button" class="btn-action" onclick="compartirCotizacion()">Compartir</button>
-                </div>
-            </form>
-        </div>
-    </section>
-
-    <!-- Pie de página -->
-    <footer>
-        <div class="footer-logo">Blesiú</div>
-        <p class="footer-slogan">Pequeños placeres para grandes momentos • Estd. 2012</p>
-        <div class="footer-credits">
-            &copy; 2026 Blesiú. Todos los derechos reservados.
-        </div>
-    </footer>
-
-    <!-- Lógica del Cotizador, PDF, Guardado y Compartido -->
-    <script>
-        function calcularCotizacion() {
-            // 1. Postres ($23 c/u, min 60, max 5000)
-            let postresInput = document.getElementById('postres');
-            let postresError = document.getElementById('postresError');
-            let numPostres = parseInt(postresInput.value) || 0;
-            let costoPostres = 0;
-
-            if (postresInput.value !== "") {
-                if (numPostres < 60 || numPostres > 5000) {
-                    postresError.style.display = 'block';
-                    costoPostres = 0;
-                } else {
-                    postresError.style.display = 'none';
-                    costoPostres = numPostres * 23;
-                }
-            } else {
-                postresError.style.display = 'none';
+        // 3. Generar y remover nodo al terminar
+        html2pdf().set(opt).from(pdfContainer).save().then(() => {
+            document.body.removeChild(pdfContainer);
+        }).catch(err => {
+            console.error('Error al generar PDF:', err);
+            if (document.body.contains(pdfContainer)) {
+                document.body.removeChild(pdfContainer);
             }
-
-            // 2. Chilitos y Salados ($23 c/u, min 60, max 5000)
-            let chilitosInput = document.getElementById('chilitos');
-            let chilitosError = document.getElementById('chilitosError');
-            let numChilitos = parseInt(chilitosInput.value) || 0;
-            let costoChilitos = 0;
-
-            if (chilitosInput.value !== "") {
-                if (numChilitos < 60 || numChilitos > 5000) {
-                    chilitosError.style.display = 'block';
-                    costoChilitos = 0;
-                } else {
-                    chilitosError.style.display = 'none';
-                    costoChilitos = numChilitos * 23;
-                }
-            } else {
-                chilitosError.style.display = 'none';
-            }
-
-            // 3. Barra de Esquites / Maruchan / Tostilocos (min 300, max 5000. 300 pzs = $6900, +$23 pza adicional)
-            let esquitesInput = document.getElementById('barraEsquites');
-            let esquitesError = document.getElementById('esquitesError');
-            let numEsquites = parseInt(esquitesInput.value) || 0;
-            let costoEsquites = 0;
-
-            if (esquitesInput.value !== "") {
-                if (numEsquites < 300 || numEsquites > 5000) {
-                    esquitesError.style.display = 'block';
-                    costoEsquites = 0;
-                } else {
-                    esquitesError.style.display = 'none';
-                    costoEsquites = 6900 + ((numEsquites - 300) * 23);
-                }
-            } else {
-                esquitesError.style.display = 'none';
-            }
-
-            // 4. Utilería
-            let costoUtileria = parseFloat(document.getElementById('utileria').value) || 0;
-
-            // 5. Comestible + Sabor Especial
-            let selectComestible = document.getElementById('comestible');
-            let costoComestible = parseFloat(selectComestible.value) || 0;
-            let personasComestible = parseInt(selectComestible.options[selectComestible.selectedIndex].getAttribute('data-personas')) || 0;
-            
-            if (document.getElementById('saborEspecial').checked && personasComestible > 0) {
-                costoComestible += (personasComestible * 5);
-            }
-
-            // 6. Bases y Montaje
-            let costoBases = parseFloat(document.getElementById('bases').value) || 0;
-            let costoMontaje = parseFloat(document.getElementById('montaje').value) || 0;
-
-            // 7. Flete
-            let km = parseFloat(document.getElementById('distancia').value) || 0;
-            let tipoZona = document.getElementById('tipoZona').value;
-            let tempAlta = document.getElementById('tempAlta').checked;
-            let costoFlete = 0;
-
-            if (km > 0) {
-                if (tipoZona === 'foraneo') {
-                    costoFlete = km * 35;
-                } else {
-                    costoFlete = 700;
-                    if (km > 10) {
-                        costoFlete += (km - 10) * 25;
-                    }
-                }
-
-                if (tempAlta) {
-                    costoFlete += 40;
-                }
-            }
-
-            // Cálculo Total
-            let total = costoPostres + costoChilitos + costoEsquites + costoUtileria + costoComestible + costoBases + costoMontaje + costoFlete;
-
-            // Renderizar Total
-            document.getElementById('totalEstimado').textContent = '$' + total.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' MXN';
-
-            return {
-                numPostres,
-                costoPostres,
-                numChilitos,
-                costoChilitos,
-                numEsquites,
-                costoEsquites,
-                costoUtileria,
-                costoComestible,
-                costoBases,
-                costoMontaje,
-                costoFlete,
-                total
-            };
-        }
-
-        // --- FUNCIONALIDAD PDF CORREGIDA ---
-        function descargarPDF() {
-            let cliente = document.getElementById('nombreCliente').value || 'Cliente';
-            let fecha = document.getElementById('fechaEvento').value || 'Por definir';
-            let lugar = document.getElementById('lugarEvento').value || 'Por definir';
-
-            let utileriaText = document.getElementById('utileria').options[document.getElementById('utileria').selectedIndex].text;
-            let comestibleText = document.getElementById('comestible').options[document.getElementById('comestible').selectedIndex].text;
-            let basesText = document.getElementById('bases').options[document.getElementById('bases').selectedIndex].text;
-            let montajeText = document.getElementById('montaje').options[document.getElementById('montaje').selectedIndex].text;
-            
-            let data = calcularCotizacion();
-
-            // Construcción de la plantilla del PDF con diseño limpio
-            let pdfContainer = document.createElement('div');
-            pdfContainer.style.padding = '40px';
-            pdfContainer.style.fontFamily = "'Helvetica Neue', Helvetica, Arial, sans-serif";
-            pdfContainer.style.color = '#48372e';
-            pdfContainer.style.backgroundColor = '#ffffff';
-
-            pdfContainer.innerHTML = `
-                <div style="text-align: center; border-bottom: 2px solid #edc2bd; padding-bottom: 20px; margin-bottom: 30px;">
-                    <h1 style="font-family: 'Times New Roman', serif; font-size: 32px; margin: 0; color: #48372e;">BLESIÚ</h1>
-                    <p style="font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-top: 5px; color: #7b5d49;">Pequeños placeres para grandes momentos • Estd. 2012</p>
-                </div>
-
-                <h2 style="font-size: 20px; text-align: center; margin-bottom: 25px; color: #48372e;">RESUMEN DE COTIZACIÓN</h2>
-
-                <table style="width: 100%; margin-bottom: 30px; border-collapse: collapse; font-size: 14px;">
-                    <tr>
-                        <td style="padding: 6px 0; font-weight: bold; width: 120px;">Cliente:</td>
-                        <td style="padding: 6px 0;">${cliente}</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 6px 0; font-weight: bold;">Fecha Evento:</td>
-                        <td style="padding: 6px 0;">${fecha}</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 6px 0; font-weight: bold;">Lugar / Ubicación:</td>
-                        <td style="padding: 6px 0;">${lugar}</td>
-                    </tr>
-                </table>
-
-                <table style="width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 30px;">
-                    <thead>
-                        <tr style="background-color: #fbf6f3; border-bottom: 1px solid #edc2bd;">
-                            <th style="padding: 10px; text-align: left; color: #48372e;">Concepto</th>
-                            <th style="padding: 10px; text-align: right; color: #48372e;">Importe</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr style="border-bottom: 1px solid #eee;">
-                            <td style="padding: 10px;">Postres individuales (${data.numPostres} piezas)</td>
-                            <td style="padding: 10px; text-align: right;">$${data.costoPostres.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #eee;">
-                            <td style="padding: 10px;">Chilitos y Salados (${data.numChilitos} piezas)</td>
-                            <td style="padding: 10px; text-align: right;">$${data.costoChilitos.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #eee;">
-                            <td style="padding: 10px;">Barra de Esquites / Maruchan / Tostilocos (${data.numEsquites} unidades)</td>
-                            <td style="padding: 10px; text-align: right;">$${data.costoEsquites.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #eee;">
-                            <td style="padding: 10px;">Pastel de Utilería: ${utileriaText}</td>
-                            <td style="padding: 10px; text-align: right;">$${data.costoUtileria.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #eee;">
-                            <td style="padding: 10px;">Pastel Comestible: ${comestibleText} ${document.getElementById('saborEspecial').checked ? '(Con Sabor Especial)' : ''}</td>
-                            <td style="padding: 10px; text-align: right;">$${data.costoComestible.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #eee;">
-                            <td style="padding: 10px;">Renta de Bases: ${basesText}</td>
-                            <td style="padding: 10px; text-align: right;">$${data.costoBases.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #eee;">
-                            <td style="padding: 10px;">Servicio de Montaje: ${montajeText}</td>
-                            <td style="padding: 10px; text-align: right;">$${data.costoMontaje.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</td>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #eee;">
-                            <td style="padding: 10px;">Flete y Traslado (${document.getElementById('distancia').value || 0} km - ${document.getElementById('tipoZona').value}) ${document.getElementById('tempAlta').checked ? '(Alta temp.)' : ''}</td>
-                            <td style="padding: 10px; text-align: right;">$${data.costoFlete.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div style="background-color: #fbf6f3; padding: 15px; border-left: 4px solid #edc2bd; display: flex; justify-content: space-between; font-size: 18px; font-weight: bold;">
-                    <span>ESTIMADO TOTAL:</span>
-                    <span>$${data.total.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</span>
-                </div>
-
-                <div style="margin-top: 50px; text-align: center; font-size: 11px; color: #7b5d49; border-top: 1px dashed #edc2bd; padding-top: 15px;">
-                    Este documento es una estimación de presupuesto generada en línea. Sujeta a confirmación de disponibilidad.
-                </div>
-            `;
-
-            let opt = {
-                margin:       [0.5, 0.5, 0.5, 0.5],
-                filename:     `Cotizacion_Blesiu_${cliente.replace(/\s+/g, '_')}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true },
-                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-            };
-
-            html2pdf().set(opt).from(pdfContainer).save();
-        }
-
-        // --- FUNCIONALIDAD GUARDAR LOCALMENTE ---
-        function guardarCotizacion() {
-            let datosCotizacion = {
-                nombreCliente: document.getElementById('nombreCliente').value,
-                fechaEvento: document.getElementById('fechaEvento').value,
-                lugarEvento: document.getElementById('lugarEvento').value,
-                postres: document.getElementById('postres').value,
-                chilitos: document.getElementById('chilitos').value,
-                barraEsquites: document.getElementById('barraEsquites').value,
-                utileria: document.getElementById('utileria').value,
-                comestible: document.getElementById('comestible').value,
-                saborEspecial: document.getElementById('saborEspecial').checked,
-                bases: document.getElementById('bases').value,
-                montaje: document.getElementById('montaje').value,
-                distancia: document.getElementById('distancia').value,
-                tipoZona: document.getElementById('tipoZona').value,
-                tempAlta: document.getElementById('tempAlta').checked,
-                total: document.getElementById('totalEstimado').textContent
-            };
-
-            localStorage.setItem('blesiu_cotizacion', JSON.stringify(datosCotizacion));
-            alert('¡Cotización guardada exitosamente en el navegador!');
-        }
-
-        // Cargar datos si existen en LocalStorage
-        function cargarCotizacionGuardada() {
-            let guardado = localStorage.getItem('blesiu_cotizacion');
-            if (guardado) {
-                let datos = JSON.parse(guardado);
-                document.getElementById('nombreCliente').value = datos.nombreCliente || '';
-                document.getElementById('fechaEvento').value = datos.fechaEvento || '';
-                document.getElementById('lugarEvento').value = datos.lugarEvento || '';
-                document.getElementById('postres').value = datos.postres || '';
-                document.getElementById('chilitos').value = datos.chilitos || '';
-                document.getElementById('barraEsquites').value = datos.barraEsquites || '';
-                document.getElementById('utileria').value = datos.utileria || '0';
-                document.getElementById('comestible').value = datos.comestible || '0';
-                document.getElementById('saborEspecial').checked = datos.saborEspecial || false;
-                document.getElementById('bases').value = datos.bases || '0';
-                document.getElementById('montaje').value = datos.montaje || '0';
-                document.getElementById('distancia').value = datos.distancia || '0';
-                document.getElementById('tipoZona').value = datos.tipoZona || 'local';
-                document.getElementById('tempAlta').checked = datos.tempAlta || false;
-                calcularCotizacion();
-            }
-        }
-
-        // --- FUNCIONALIDAD COMPARTIR ---
-        function compartirCotizacion() {
-            let cliente = document.getElementById('nombreCliente').value || 'Cliente';
-            let fecha = document.getElementById('fechaEvento').value || 'Por definir';
-            let total = document.getElementById('totalEstimado').textContent;
-
-            let textoMensaje = `¡Hola! Aquí tienes el resumen de tu cotización de Blesiú:\n` +
-                               `👤 Cliente: ${cliente}\n` +
-                               `📅 Fecha: ${fecha}\n` +
-                               `💰 Estimado Total: ${total}\n\n` +
-                               `Generado desde la plataforma de Blesiú.`;
-
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Cotización Blesiú',
-                    text: textoMensaje,
-                    url: window.location.href
-                }).catch(() => {});
-            } else {
-                navigator.clipboard.writeText(textoMensaje);
-                alert('Resumen copiado al portapapeles. ¡Puedes pegarlo y enviarlo por mensaje!');
-            }
-        }
-
-        // Event listeners para recalcular automáticamente
-        document.querySelectorAll('#cateringForm select, #cateringForm input').forEach(element => {
-            element.addEventListener('input', calcularCotizacion);
-            element.addEventListener('change', calcularCotizacion);
         });
+    }
+</script>
 
-        // Inicialización
-        cargarCotizacionGuardada();
-        calcularCotizacion();
-    </script>
 </body>
 </html>
