@@ -388,19 +388,6 @@
             display: none;
         }
 
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            margin-top: 0.5rem;
-        }
-
-        .checkbox-group input {
-            width: 18px;
-            height: 18px;
-            accent-color: #48372e;
-        }
-
         .calc-summary {
             margin-top: 2rem;
             padding: 1.5rem;
@@ -565,7 +552,7 @@
         </div>
     </section>
 
-    <!-- Cotizador Integrado Actualizado (Sin precios visibles en etiquetas/títulos) -->
+    <!-- Cotizador Integrado Actualizado -->
     <section class="calculator-section" id="cotizador">
         <div class="calculator-container">
             <h2 class="calc-title">Cotiza tu Evento</h2>
@@ -630,14 +617,6 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Opciones de Sabor</label>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="saborEspecial">
-                            <label for="saborEspecial" style="text-transform:none; font-weight:normal;">Sabor Especial</label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
                         <label for="bases">Bases para postres</label>
                         <select id="bases">
                             <option value="0">Sin renta de bases</option>
@@ -651,26 +630,6 @@
                             <option value="0">Sin montaje</option>
                             <option value="3500">Montaje profesional ($3,500)</option>
                         </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="distancia">Distancia de entrega (km)</label>
-                        <input type="number" id="distancia" min="0" value="0" placeholder="Ej. 15">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="tipoZona">Tipo de Zona</label>
-                        <select id="tipoZona">
-                            <option value="local">Local</option>
-                            <option value="foraneo">Foráneo ($35 x km)</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group full-width">
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="tempAlta">
-                            <label for="tempAlta" style="text-transform:none; font-weight:normal;">Entrega en zona/temporada de Alta Temperatura</label>
-                        </div>
                     </div>
                 </div>
 
@@ -755,41 +714,15 @@
             // 4. Utilería
             let costoUtileria = parseFloat(document.getElementById('utileria').value) || 0;
 
-            // 5. Comestible + Sabor Especial
+            // 5. Comestible
             let selectComestible = document.getElementById('comestible');
             let costoComestible = parseFloat(selectComestible.value) || 0;
-            let personasComestible = parseInt(selectComestible.options[selectComestible.selectedIndex].getAttribute('data-personas')) || 0;
-            
-            if (document.getElementById('saborEspecial').checked && personasComestible > 0) {
-                costoComestible += (personasComestible * 5);
-            }
 
             // 6. Bases y Montaje
             let costoBases = parseFloat(document.getElementById('bases').value) || 0;
             let costoMontaje = parseFloat(document.getElementById('montaje').value) || 0;
 
-            // 7. Flete
-            let km = parseFloat(document.getElementById('distancia').value) || 0;
-            let tipoZona = document.getElementById('tipoZona').value;
-            let tempAlta = document.getElementById('tempAlta').checked;
-            let costoFlete = 0;
-
-            if (km > 0) {
-                if (tipoZona === 'foraneo') {
-                    costoFlete = km * 35;
-                } else {
-                    costoFlete = 700;
-                    if (km > 10) {
-                        costoFlete += (km - 10) * 25;
-                    }
-                }
-
-                if (tempAlta) {
-                    costoFlete += 40;
-                }
-            }
-
-            let total = costoPostres + costoChilitos + costoEsquites + costoUtileria + costoComestible + costoBases + costoMontaje + costoFlete;
+            let total = costoPostres + costoChilitos + costoEsquites + costoUtileria + costoComestible + costoBases + costoMontaje;
 
             document.getElementById('totalEstimado').textContent = '$' + total.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' MXN';
 
@@ -801,7 +734,6 @@
                 costoComestible,
                 costoBases,
                 costoMontaje,
-                costoFlete,
                 total
             };
         }
@@ -854,10 +786,9 @@
                                 [`Chilitos y Salados (${data.numChilitos} piezas)`, { text: `$${data.costoChilitos.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }],
                                 [`Barra de Esquites / Maruchan / Tostilocos (${data.numEsquites} pzs)`, { text: `$${data.costoEsquites.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }],
                                 [`Pastel de Utilería: ${utileriaText}`, { text: `$${data.costoUtileria.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }],
-                                [`Pastel Comestible: ${comestibleText} ${document.getElementById('saborEspecial').checked ? '(Con Sabor Especial)' : ''}`, { text: `$${data.costoComestible.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }],
+                                [`Pastel Comestible: ${comestibleText}`, { text: `$${data.costoComestible.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }],
                                 [`Renta de Bases: ${basesText}`, { text: `$${data.costoBases.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }],
-                                [`Servicio de Montaje: ${montajeText}`, { text: `$${data.costoMontaje.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }],
-                                [`Flete y Traslado (${document.getElementById('distancia').value || 0} km - ${document.getElementById('tipoZona').value}) ${document.getElementById('tempAlta').checked ? '(Alta temp.)' : ''}`, { text: `$${data.costoFlete.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }]
+                                [`Servicio de Montaje: ${montajeText}`, { text: `$${data.costoMontaje.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }]
                             ]
                         },
                         layout: {
@@ -931,10 +862,9 @@ Pequeños placeres para grandes momentos
 • Chilitos y Salados (${data.numChilitos} pzs): $${data.costoChilitos.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN
 • Barra Esquites/Maruchan (${data.numEsquites} pzs): $${data.costoEsquites.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN
 • Pastel Utilería: ${utileriaText} ($${data.costoUtileria.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN)
-• Pastel Comestible: ${comestibleText} ${document.getElementById('saborEspecial').checked ? '(Sabor Especial)' : ''} ($${data.costoComestible.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN)
+• Pastel Comestible: ${comestibleText} ($${data.costoComestible.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN)
 • Bases: ${basesText} ($${data.costoBases.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN)
 • Montaje: ${montajeText} ($${data.costoMontaje.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN)
-• Flete (${document.getElementById('distancia').value || 0} km): $${data.costoFlete.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN
 
 💰 *ESTIMADO TOTAL:* $${data.total.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN
 
