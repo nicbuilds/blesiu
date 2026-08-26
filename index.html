@@ -234,17 +234,17 @@
         }
 
         /* ==========================================
-           DESTACADOS / PRODUCTOS
+           DESTACADOS / CARRUSEL "NUESTRA ESENCIA"
            ========================================== */
         .featured {
             padding: 6rem 2rem;
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
         .section-header {
             text-align: center;
-            margin-bottom: 4rem;
+            margin-bottom: 3rem;
         }
 
         .section-header h2 {
@@ -257,48 +257,85 @@
             font-style: italic;
         }
 
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2.5rem;
+        .carousel-container {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(72, 55, 46, 0.1);
         }
 
-        .card {
-            background-color: var(--color-white);
-            border: 1px solid rgba(237, 194, 189, 0.4);
-            border-radius: 8px;
-            padding: 2.5rem 2rem;
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            width: 100%;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(72, 55, 46, 0.08);
+        .carousel-slide {
+            min-width: 100%;
+            box-sizing: border-box;
+            position: relative;
         }
 
-        .card-icon {
-            width: 60px;
-            height: 60px;
+        .carousel-slide img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(251, 246, 243, 0.85);
+            color: var(--color-dark-brown);
+            border: 1px solid var(--color-soft-pink);
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
-            background-color: var(--color-soft-pink);
-            margin: 0 auto 1.5rem;
+            cursor: pointer;
+            font-size: 1.2rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--color-dark-brown);
-            font-family: var(--font-heading);
-            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            z-index: 10;
         }
 
-        .card h3 {
-            font-size: 1.4rem;
-            margin-bottom: 1rem;
+        .carousel-btn:hover {
+            background: var(--color-dark-brown);
+            color: var(--color-white);
         }
 
-        .card p {
-            font-size: 0.95rem;
-            color: #66554b;
+        .carousel-btn.prev {
+            left: 20px;
+        }
+
+        .carousel-btn.next {
+            right: 20px;
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 1.5rem;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--color-soft-pink);
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .dot.active {
+            background-color: var(--color-dark-brown);
+            transform: scale(1.2);
         }
 
         /* ==========================================
@@ -479,6 +516,7 @@
             .calc-grid { grid-template-columns: 1fr; }
             .form-group.full-width { grid-column: span 1; }
             .calc-actions { flex-direction: column; }
+            .carousel-slide img { height: 320px; }
         }
     </style>
 </head>
@@ -505,7 +543,7 @@
         <div class="hero-content">
             <span class="badge-estd">Estd. 2012</span>
             <h1>Pequeños placeres para grandes momentos</h1>
-            <p>Crear experiencias memorables a través de mesas de postres y repostería para eventos, con un enfoque en el detalle, la calidad y el buen gusto.</p>
+            <p>Descubre el refinamiento, la calidez y el detalle artesanal creados para elevar cada instante de tu día.</p>
             <a href="#cotizador" class="cta-button">Cotizar Evento</a>
         </div>
     </section>
@@ -520,35 +558,43 @@
             </div>
             <div class="about-text">
                 <h2>Sobriedad, refinamiento y carácter clásico</h2>
-                <p>Ofrecer repostería de alta calidad para eventos sociales, cuidando cada detalle con pasión, puntualidad y dedicación, para acompañar momentos únicos en la vida de nuestros clientes</p>
-                <p></p>
+                <p>Nuestra propuesta nace de la búsqueda de la belleza simple y bien hecha. Con proporciones armónicas y un estilo elegante sin caer en lo ornamental, creamos piezas e insumos cuidados minuciosamente.</p>
+                <p>Conectamos con lo artesanal y lo orgánico, recordando la tierra y valorando los ingredientes y materiales naturales en su forma más pura.</p>
             </div>
         </div>
     </section>
 
-    <!-- Sección de Experiencias / Productos -->
+    <!-- Sección de Experiencias / Carrusel Nuestra Esencia -->
     <section class="featured" id="experiencia">
         <div class="section-header">
             <h2>Nuestra Esencia</h2>
             <p>La delicadeza de los detalles</p>
         </div>
         
-        <div class="cards-grid">
-            <div class="card">
-                <div class="card-icon">01</div>
-                <h3>Estilo Minimalista</h3>
-                <p>Líneas limpias y estructuras claras que permiten respirar a cada diseño con elegancia atemporal.</p>
+        <div class="carousel-container">
+            <div class="carousel-track" id="carouselTrack">
+                <div class="carousel-slide">
+                    <img src="https://github.com/nicbuilds/blesiu/VE_-1.jpg" alt="Nuestra Esencia 1">
+                </div>
+                <div class="carousel-slide">
+                    <img src="https://github.com/nicbuilds/blesiu/VE_-12.jpg" alt="Nuestra Esencia 2">
+                </div>
+                <div class="carousel-slide">
+                    <img src="https://github.com/nicbuilds/blesiu/VE_-15.jpg" alt="Nuestra Esencia 3">
+                </div>
+                <div class="carousel-slide">
+                    <img src="https://github.com/nicbuilds/blesiu/VE_-17.jpg" alt="Nuestra Esencia 4">
+                </div>
             </div>
-            <div class="card">
-                <div class="card-icon">02</div>
-                <h3>Origen Artesanal</h3>
-                <p>Conexión directa con procesos cuidados que honran la materia prima y el trabajo detallado.</p>
-            </div>
-            <div class="card">
-                <div class="card-icon">03</div>
-                <h3>Momentos Únicos</h3>
-                <p>Creamos experiencias pensadas para acompañarte en los instantes más especiales de tu vida.</p>
-            </div>
+            <button class="carousel-btn prev" id="prevBtn">&#10094;</button>
+            <button class="carousel-btn next" id="nextBtn">&#10095;</button>
+        </div>
+
+        <div class="carousel-dots" id="carouselDots">
+            <span class="dot active" onclick="goToSlide(0)"></span>
+            <span class="dot" onclick="goToSlide(1)"></span>
+            <span class="dot" onclick="goToSlide(2)"></span>
+            <span class="dot" onclick="goToSlide(3)"></span>
         </div>
     </section>
 
@@ -657,8 +703,45 @@
         </div>
     </footer>
 
-    <!-- Lógica del Cotizador -->
+    <!-- Lógica del Carrusel y Cotizador -->
     <script>
+        // --- LÓGICA DEL CARRUSEL ---
+        const track = document.getElementById('carouselTrack');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const dots = document.querySelectorAll('.dot');
+        let currentSlide = 0;
+        const totalSlides = dots.length;
+
+        function updateCarousel() {
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateCarousel();
+        }
+
+        nextBtn.addEventListener('click', () => {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateCarousel();
+        });
+
+        prevBtn.addEventListener('click', () => {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateCarousel();
+        });
+
+        // Cambio automático de diapositivas cada 5 segundos
+        setInterval(() => {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateCarousel();
+        }, 5000);
+
+        // --- LÓGICA DEL COTIZADOR ---
         function calcularCotizacion() {
             // 1. Postres
             let postresInput = document.getElementById('postres');
