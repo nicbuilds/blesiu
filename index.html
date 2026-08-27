@@ -1,12 +1,17 @@
-Put your HTML text here<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blesiú | Pequeños placeres para grandes momentos</title>
+    <!-- Tipografías de Google Fonts: Playfair Display y Sans-Serif para cuerpo -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Librería PDFMake (Generación vectorial directa) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 
     <style>
         /* ==========================================
@@ -14,10 +19,10 @@ Put your HTML text here<!DOCTYPE html>
            ========================================== */
         :root {
             --color-dark-brown: #48372e;  /* Profundidad sin agresividad */
-            --color-soft-pink: #edc2bd;   /* Dulzura y cercanía */
-            --color-cream-bg: #fbf6f3;    /* Serenidad y sofisticación */
-            --color-white: #ffffff;
-            --color-earth-brown: #7b5d49;  /* Artesanal y orgánico */
+            --color-soft-pink: #edc2bd;   /* Dulzura, feminidad y cercanía */
+            --color-cream-bg: #fbf6f3;     /* Serenidad, orden y sofisticación */
+            --color-white: #ffffff;        /* Base y contención visual */
+            --color-earth-brown: #7b5d49;  /* Artesanal, orgánico y natural */
             
             --font-heading: 'Playfair Display', serif;
             --font-body: 'Plus Jakarta Sans', sans-serif;
@@ -28,6 +33,10 @@ Put your HTML text here<!DOCTYPE html>
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
@@ -120,14 +129,14 @@ Put your HTML text here<!DOCTYPE html>
             text-align: center;
             position: relative;
             overflow: hidden;
-            /* Carga de la imagen enfocado en la mitad inferior (center bottom) */
+            /* Carga de la imagen enfocada en la mitad inferior */
             background-image: url('https://nicbuilds.github.io/blesiu/VE_-19.jpg');
             background-position: center bottom;
             background-size: cover;
             background-repeat: no-repeat;
         }
 
-        /* Overlay para difuminar la imagen y suavizar el tono de fondo */
+        /* Capa con difuminado (backdrop-filter) */
         .hero::before {
             content: '';
             position: absolute;
@@ -135,15 +144,12 @@ Put your HTML text here<!DOCTYPE html>
             left: 0;
             right: 0;
             bottom: 0;
-            /* Capa semitransparente con el tono crema de la marca */
             background-color: rgba(251, 246, 243, 0.75);
-            /* Efecto de difuminado sobre la imagen */
-            backdrop-filter: blur(2px);
-            -webkit-backdrop-filter: blur(2px);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
             z-index: 1;
         }
 
-        /* Contenido por encima de la imagen difuminada */
         .hero-content {
             max-width: 800px;
             position: relative;
@@ -168,7 +174,6 @@ Put your HTML text here<!DOCTYPE html>
             line-height: 1.2;
             margin-bottom: 1.5rem;
             color: var(--color-dark-brown);
-            text-shadow: 0 2px 10px rgba(255, 255, 255, 0.3);
         }
 
         .hero p {
@@ -226,19 +231,20 @@ Put your HTML text here<!DOCTYPE html>
         .about-image-inner {
             background-color: var(--color-cream-bg);
             border-radius: 50% / 40%;
-            padding: 4rem 2rem;
+            padding: 1rem 0.5rem;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
         }
 
-        .brand-monogram {
-            font-family: var(--font-heading);
-            font-size: 5rem;
-            font-style: italic;
-            color: var(--color-dark-brown);
-            line-height: 1;
+        .brand-monogram-img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            transform: scale(2.2);
         }
 
         .about-text h2 {
@@ -252,17 +258,17 @@ Put your HTML text here<!DOCTYPE html>
         }
 
         /* ==========================================
-           DESTACADOS / PRODUCTOS
+           DESTACADOS / CARRUSEL "NUESTRA ESENCIA"
            ========================================== */
         .featured {
             padding: 6rem 2rem;
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
         .section-header {
             text-align: center;
-            margin-bottom: 4rem;
+            margin-bottom: 3rem;
         }
 
         .section-header h2 {
@@ -275,48 +281,267 @@ Put your HTML text here<!DOCTYPE html>
             font-style: italic;
         }
 
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2.5rem;
+        .carousel-container {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(72, 55, 46, 0.1);
         }
 
-        .card {
-            background-color: var(--color-white);
-            border: 1px solid rgba(237, 194, 189, 0.4);
-            border-radius: 8px;
-            padding: 2.5rem 2rem;
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            width: 100%;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(72, 55, 46, 0.08);
+        .carousel-slide {
+            min-width: 100%;
+            box-sizing: border-box;
+            position: relative;
         }
 
-        .card-icon {
-            width: 60px;
-            height: 60px;
+        .carousel-slide img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(251, 246, 243, 0.85);
+            color: var(--color-dark-brown);
+            border: 1px solid var(--color-soft-pink);
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
-            background-color: var(--color-soft-pink);
-            margin: 0 auto 1.5rem;
+            cursor: pointer;
+            font-size: 1.2rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--color-dark-brown);
-            font-family: var(--font-heading);
-            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            z-index: 10;
         }
 
-        .card h3 {
-            font-size: 1.4rem;
-            margin-bottom: 1rem;
+        .carousel-btn:hover {
+            background: var(--color-dark-brown);
+            color: var(--color-white);
         }
 
-        .card p {
+        .carousel-btn.prev {
+            left: 20px;
+        }
+
+        .carousel-btn.next {
+            right: 20px;
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 1.5rem;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--color-soft-pink);
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .dot.active {
+            background-color: var(--color-dark-brown);
+            transform: scale(1.2);
+        }
+
+        /* ==========================================
+           COTIZADOR DE EVENTOS
+           ========================================== */
+        .calculator-section {
+            padding: 6rem 2rem;
+            background-color: var(--color-cream-bg, #fbf6f3);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--color-dark-brown, #48372e);
+            border-top: 1px solid rgba(237, 194, 189, 0.3);
+        }
+
+        .calculator-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 1px solid rgba(237, 194, 189, 0.5);
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(72, 55, 46, 0.05);
+        }
+
+        .calc-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .calc-subtitle {
+            text-align: center;
+            color: #7b5d49;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+
+        .calc-divider {
+            border: 0;
+            border-top: 1px dashed #edc2bd;
+            margin: 1.5rem 0;
+        }
+
+        .calc-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #48372e;
+        }
+
+        select, input[type="number"], input[type="text"], input[type="date"] {
+            padding: 0.8rem 1rem;
+            border: 1px solid #edc2bd;
+            border-radius: 6px;
+            background-color: #fbf6f3;
             font-size: 0.95rem;
-            color: #66554b;
+            color: #48372e;
+            outline: none;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+
+        select:focus, input:focus {
+            border-color: #48372e;
+        }
+
+        .error-msg {
+            font-size: 0.8rem;
+            color: #c0392b;
+            display: none;
+        }
+
+        .calc-summary {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: #fbf6f3;
+            border-radius: 8px;
+            border-left: 4px solid #edc2bd;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.4rem;
+            font-family: 'Playfair Display', serif;
+            font-weight: bold;
+        }
+
+        .calc-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 0.9rem 1.2rem;
+            border: 1px solid var(--color-dark-brown);
+            border-radius: 6px;
+            background-color: transparent;
+            color: var(--color-dark-brown);
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .btn-action:hover {
+            background-color: var(--color-earth-brown);
+            border-color: var(--color-earth-brown);
+            color: var(--color-white);
+        }
+
+        .btn-action.btn-primary-action {
+            background-color: var(--color-dark-brown);
+            color: var(--color-white);
+        }
+
+        /* ==========================================
+           BOTONES FLOTANTES (WHATSAPP Y LLAMADA)
+           ========================================== */
+        .floating-buttons-container {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 9999;
+        }
+
+        .float-btn {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+        }
+
+        .float-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+        }
+
+        .float-btn svg {
+            width: 28px;
+            height: 28px;
+            fill: currentColor;
+        }
+
+        .float-btn.whatsapp {
+            background-color: #25d366;
+        }
+
+        .float-btn.call {
+            background-color: var(--color-dark-brown);
         }
 
         /* ==========================================
@@ -357,11 +582,19 @@ Put your HTML text here<!DOCTYPE html>
             .hero h1 { font-size: 2.5rem; }
             .about-grid { grid-template-columns: 1fr; gap: 2rem; }
             .nav-links { display: none; }
+            .calc-grid { grid-template-columns: 1fr; }
+            .form-group.full-width { grid-column: span 1; }
+            .calc-actions { flex-direction: column; }
+            .carousel-slide img { height: 320px; }
+            .floating-buttons-container { bottom: 15px; right: 15px; }
+            .float-btn { width: 50px; height: 50px; }
+            .float-btn svg { width: 24px; height: 24px; }
         }
     </style>
 </head>
 <body>
 
+    <!-- Navegación -->
     <header>
         <div class="nav-container">
             <div class="brand-logo">
@@ -372,26 +605,27 @@ Put your HTML text here<!DOCTYPE html>
                 <li><a href="#inicio">Inicio</a></li>
                 <li><a href="#nosotros">Nosotros</a></li>
                 <li><a href="#experiencia">Experiencia</a></li>
-                <li><a href="#contacto">Contacto</a></li>
+                <li><a href="#cotizador">Cotizador</a></li>
             </ul>
         </div>
     </header>
 
+    <!-- Sección Principal (Hero con Imagen de Fondo y Blur) -->
     <section class="hero" id="inicio">
         <div class="hero-content">
             <span class="badge-estd">Estd. 2012</span>
             <h1>Pequeños placeres para grandes momentos</h1>
             <p>Descubre el refinamiento, la calidez y el detalle artesanal creados para elevar cada instante de tu día.</p>
-            <a href="#experiencia" class="cta-button">Explorar Colección</a>
+            <a href="#cotizador" class="cta-button">Cotizar Evento</a>
         </div>
     </section>
 
+    <!-- Sección Sobre la Marca -->
     <section class="about" id="nosotros">
         <div class="about-grid">
             <div class="about-image-frame">
                 <div class="about-image-inner">
-                    <span class="brand-monogram">B</span>
-                    <span style="letter-spacing: 3px; font-size: 0.8rem; margin-top: 1rem; color: var(--color-earth-brown);">DESDE 2012</span>
+                    <img src="https://nicbuilds.github.io/blesiu/b1.png" alt="Blesiú Monogram" class="brand-monogram-img">
                 </div>
             </div>
             <div class="about-text">
@@ -402,31 +636,153 @@ Put your HTML text here<!DOCTYPE html>
         </div>
     </section>
 
+    <!-- Sección de Experiencias / Carrusel Nuestra Esencia -->
     <section class="featured" id="experiencia">
         <div class="section-header">
             <h2>Nuestra Esencia</h2>
             <p>La delicadeza de los detalles</p>
         </div>
         
-        <div class="cards-grid">
-            <div class="card">
-                <div class="card-icon">01</div>
-                <h3>Estilo Minimalista</h3>
-                <p>Líneas limpias y estructuras claras que permiten respirar a cada diseño con elegancia atemporal.</p>
+        <div class="carousel-container">
+            <div class="carousel-track" id="carouselTrack">
+                <div class="carousel-slide">
+                    <img src="https://nicbuilds.github.io/blesiu/VE_-1.jpg" alt="Nuestra Esencia 1">
+                </div>
+                <div class="carousel-slide">
+                    <img src="https://nicbuilds.github.io/blesiu/VE_-12.jpg" alt="Nuestra Esencia 2">
+                </div>
+                <div class="carousel-slide">
+                    <img src="https://nicbuilds.github.io/blesiu/VE_-15.jpg" alt="Nuestra Esencia 3">
+                </div>
+                <div class="carousel-slide">
+                    <img src="https://nicbuilds.github.io/blesiu/VE_-17.jpg" alt="Nuestra Esencia 4">
+                </div>
             </div>
-            <div class="card">
-                <div class="card-icon">02</div>
-                <h3>Origen Artesanal</h3>
-                <p>Conexión directa con procesos cuidados que honran la materia prima y el trabajo detallado.</p>
-            </div>
-            <div class="card">
-                <div class="card-icon">03</div>
-                <h3>Momentos Únicos</h3>
-                <p>Creamos experiencias pensadas para acompañarte en los instantes más especiales de tu vida.</p>
-            </div>
+            <button class="carousel-btn prev" id="prevBtn">&#10094;</button>
+            <button class="carousel-btn next" id="nextBtn">&#10095;</button>
+        </div>
+
+        <div class="carousel-dots" id="carouselDots">
+            <span class="dot active" onclick="goToSlide(0)"></span>
+            <span class="dot" onclick="goToSlide(1)"></span>
+            <span class="dot" onclick="goToSlide(2)"></span>
+            <span class="dot" onclick="goToSlide(3)"></span>
         </div>
     </section>
 
+    <!-- Cotizador Integrado Actualizado -->
+    <section class="calculator-section" id="cotizador">
+        <div class="calculator-container">
+            <h2 class="calc-title">Cotiza tu Evento</h2>
+            <p class="calc-subtitle">Diseña la experiencia dulce y salada para tus invitados</p>
+
+            <form id="cateringForm">
+                <div class="calc-grid">
+                    <div class="form-group full-width">
+                        <label for="nombreCliente">Nombre del Cliente</label>
+                        <input type="text" id="nombreCliente" placeholder="Ej. María García">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fechaEvento">Fecha del Evento</label>
+                        <input type="date" id="fechaEvento">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lugarEvento">Lugar / Dirección del Evento</label>
+                        <input type="text" id="lugarEvento" placeholder="Ej. Jardín Las Rosas">
+                    </div>
+                </div>
+
+                <hr class="calc-divider">
+
+                <div class="calc-grid">
+                    <div class="form-group">
+                        <label for="postres">Cantidad de Postres</label>
+                        <input type="number" id="postres" min="60" max="5000" placeholder="Mínimo 60, máximo 5000">
+                        <span id="postresError" class="error-msg">Ingresa entre 60 y 5000 piezas.</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="chilitos">Chilitos y Salados</label>
+                        <input type="number" id="chilitos" min="60" max="5000" placeholder="Mínimo 60, máximo 5000">
+                        <span id="chilitosError" class="error-msg">Ingresa entre 60 y 5000 piezas.</span>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="barraEsquites">Barra de Esquites / Maruchan / Tostilocos</label>
+                        <input type="number" id="barraEsquites" min="300" max="5000" placeholder="Mínimo 300, máximo 5000 unidades">
+                        <span id="esquitesError" class="error-msg">Ingresa entre 300 y 5000 unidades.</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="utileria">Pastel de Utilería</label>
+                        <select id="utileria">
+                            <option value="0">Sin pastel de utilería</option>
+                            <option value="2200">2 Pisos ($2,200)</option>
+                            <option value="2600">3 Pisos ($2,600)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="comestible">Pastel Comestible (Plancha)</label>
+                        <select id="comestible">
+                            <option value="0" data-personas="0">Sin pastel comestible</option>
+                            <option value="1350" data-personas="50">50 personas ($1,350)</option>
+                            <option value="2450" data-personas="100">100 personas ($2,450)</option>
+                            <option value="3800" data-personas="150">150 personas ($3,800)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bases">Bases para postres</label>
+                        <select id="bases">
+                            <option value="0">Sin renta de bases</option>
+                            <option value="1400">Incluir bases ($1,400)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="montaje">Servicio de Montaje</label>
+                        <select id="montaje">
+                            <option value="0">Sin montaje</option>
+                            <option value="3500">Montaje profesional ($3,500)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="calc-summary">
+                    <div class="summary-total">
+                        <span>Estimado Total:</span>
+                        <span id="totalEstimado">$0.00 MXN</span>
+                    </div>
+                </div>
+
+                <div class="calc-actions">
+                    <button type="button" class="btn-action btn-primary-action" onclick="descargarPDF()">Descargar PDF</button>
+                    <button type="button" class="btn-action" onclick="compartirCotizacion()">Compartir Cotización</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- Botones Flotantes de Contacto -->
+    <div class="floating-buttons-container">
+        <!-- Botón Llamada -->
+        <a href="tel:+529993945283" class="float-btn call" title="Llamar a Blesiú">
+            <svg viewBox="0 0 24 24">
+                <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+            </svg>
+        </a>
+        <!-- Botón WhatsApp -->
+        <a href="https://wa.me/529993945283" target="_blank" class="float-btn whatsapp" title="Chat de WhatsApp">
+            <svg viewBox="0 0 24 24">
+                <path d="M12.031 0C5.394 0 0 5.394 0 12.031c0 2.12.553 4.18 1.604 5.996L.07 24l6.107-1.602a11.96 11.96 0 005.854 1.523h.005c6.636 0 12.03-5.394 12.03-12.03C24.066 5.394 18.67 0 12.031 0zm0 22.083h-.004a9.982 9.982 0 01-5.088-1.397l-.365-.217-3.782.992 1.009-3.687-.238-.379a9.96 9.96 0 01-1.527-5.364c0-5.514 4.486-10 10-10 5.514 0 10 4.486 10 10s-4.486 10-10 10zm5.485-7.495c-.301-.15-1.782-.879-2.057-.979-.275-.101-.476-.15-.676.15-.2.301-.776.979-.951 1.18-.175.2-.351.226-.652.076-.301-.15-1.272-.469-2.424-1.496-.897-.798-1.502-1.784-1.677-2.084-.175-.301-.019-.463.131-.613.136-.135.301-.351.451-.526.15-.175.201-.301.301-.502.1-.2.05-.376-.025-.526-.075-.15-.676-1.63-.927-2.23-.243-.585-.49-.505-.676-.515-.175-.01-.376-.01-.576-.01s-.526.075-.802.376c-.275.301-1.052 1.028-1.052 2.508 0 1.48 1.077 2.909 1.227 3.11.15.2 2.119 3.235 5.134 4.538.717.31 1.277.496 1.713.634.72.228 1.375.196 1.893.118.578-.087 1.782-.727 2.033-1.428.25-.702.25-1.304.175-1.428-.075-.126-.275-.201-.576-.351z"/>
+            </svg>
+        </a>
+    </div>
+
+    <!-- Pie de página -->
     <footer>
         <div class="footer-logo">Blesiú</div>
         <p class="footer-slogan">Pequeños placeres para grandes momentos • Estd. 2012</p>
@@ -435,5 +791,275 @@ Put your HTML text here<!DOCTYPE html>
         </div>
     </footer>
 
+    <!-- Lógica del Carrusel y Cotizador -->
+    <script>
+        // --- LÓGICA DEL CARRUSEL ---
+        const track = document.getElementById('carouselTrack');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const dots = document.querySelectorAll('.dot');
+        let currentSlide = 0;
+        const totalSlides = dots.length;
+
+        function updateCarousel() {
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateCarousel();
+        }
+
+        nextBtn.addEventListener('click', () => {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateCarousel();
+        });
+
+        prevBtn.addEventListener('click', () => {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateCarousel();
+        });
+
+        // Cambio automático de diapositivas cada 5 segundos
+        setInterval(() => {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateCarousel();
+        }, 5000);
+
+        // --- LÓGICA DEL COTIZADOR ---
+        function calcularCotizacion() {
+            // 1. Postres
+            let postresInput = document.getElementById('postres');
+            let postresError = document.getElementById('postresError');
+            let numPostres = parseInt(postresInput.value) || 0;
+            let costoPostres = 0;
+
+            if (postresInput.value !== "") {
+                if (numPostres < 60 || numPostres > 5000) {
+                    postresError.style.display = 'block';
+                } else {
+                    postresError.style.display = 'none';
+                    costoPostres = numPostres * 23;
+                }
+            } else {
+                postresError.style.display = 'none';
+            }
+
+            // 2. Chilitos y Salados
+            let chilitosInput = document.getElementById('chilitos');
+            let chilitosError = document.getElementById('chilitosError');
+            let numChilitos = parseInt(chilitosInput.value) || 0;
+            let costoChilitos = 0;
+
+            if (chilitosInput.value !== "") {
+                if (numChilitos < 60 || numChilitos > 5000) {
+                    chilitosError.style.display = 'block';
+                } else {
+                    chilitosError.style.display = 'none';
+                    costoChilitos = numChilitos * 23;
+                }
+            } else {
+                chilitosError.style.display = 'none';
+            }
+
+            // 3. Barra de Esquites
+            let esquitesInput = document.getElementById('barraEsquites');
+            let esquitesError = document.getElementById('esquitesError');
+            let numEsquites = parseInt(esquitesInput.value) || 0;
+            let costoEsquites = 0;
+
+            if (esquitesInput.value !== "") {
+                if (numEsquites < 300 || numEsquites > 5000) {
+                    esquitesError.style.display = 'block';
+                } else {
+                    esquitesError.style.display = 'none';
+                    costoEsquites = 6900 + ((numEsquites - 300) * 23);
+                }
+            } else {
+                esquitesError.style.display = 'none';
+            }
+
+            // 4. Utilería
+            let costoUtileria = parseFloat(document.getElementById('utileria').value) || 0;
+
+            // 5. Comestible
+            let selectComestible = document.getElementById('comestible');
+            let costoComestible = parseFloat(selectComestible.value) || 0;
+
+            // 6. Bases y Montaje
+            let costoBases = parseFloat(document.getElementById('bases').value) || 0;
+            let costoMontaje = parseFloat(document.getElementById('montaje').value) || 0;
+
+            let total = costoPostres + costoChilitos + costoEsquites + costoUtileria + costoComestible + costoBases + costoMontaje;
+
+            document.getElementById('totalEstimado').textContent = '$' + total.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' MXN';
+
+            return {
+                numPostres, costoPostres,
+                numChilitos, costoChilitos,
+                numEsquites, costoEsquites,
+                costoUtileria,
+                costoComestible,
+                costoBases,
+                costoMontaje,
+                total
+            };
+        }
+
+        // --- GENERACIÓN DE PDF VECTORIAL CON PDFMAKE ---
+        function descargarPDF() {
+            let cliente = document.getElementById('nombreCliente').value || 'Cliente';
+            let fecha = document.getElementById('fechaEvento').value || 'Por definir';
+            let lugar = document.getElementById('lugarEvento').value || 'Por definir';
+
+            let utileriaText = document.getElementById('utileria').options[document.getElementById('utileria').selectedIndex].text;
+            let comestibleText = document.getElementById('comestible').options[document.getElementById('comestible').selectedIndex].text;
+            let basesText = document.getElementById('bases').options[document.getElementById('bases').selectedIndex].text;
+            let montajeText = document.getElementById('montaje').options[document.getElementById('montaje').selectedIndex].text;
+            let data = calcularCotizacion();
+
+            let docDefinition = {
+                pageSize: 'LETTER',
+                pageMargins: [40, 40, 40, 40],
+                content: [
+                    { text: 'BLESIÚ', style: 'header' },
+                    { text: 'PEQUEÑOS PLACERES PARA GRANDES MOMENTOS • ESTD. 2012', style: 'subheader' },
+                    { canvas: [{ type: 'line', x1: 0, y1: 10, x2: 532, y2: 10, lineWidth: 1.5, lineColor: '#edc2bd' }] },
+                    { text: 'RESUMEN DE COTIZACIÓN', style: 'title', margin: [0, 20, 0, 15] },
+                    
+                    {
+                        style: 'infoTable',
+                        table: {
+                            widths: [120, '*'],
+                            body: [
+                                [{ text: 'Cliente:', bold: true }, cliente],
+                                [{ text: 'Fecha Evento:', bold: true }, fecha],
+                                [{ text: 'Lugar / Ubicación:', bold: true }, lugar]
+                            ]
+                        },
+                        layout: 'noBorders',
+                        margin: [0, 0, 0, 20]
+                    },
+
+                    {
+                        table: {
+                            headerRows: 1,
+                            widths: ['*', 120],
+                            body: [
+                                [
+                                    { text: 'Concepto', style: 'tableHeader' },
+                                    { text: 'Importe', style: 'tableHeader', alignment: 'right' }
+                                ],
+                                [`Postres individuales (${data.numPostres} piezas)`, { text: `$${data.costoPostres.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }],
+                                [`Chilitos y Salados (${data.numChilitos} piezas)`, { text: `$${data.costoChilitos.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }],
+                                [`Barra de Esquites / Maruchan / Tostilocos (${data.numEsquites} pzs)`, { text: `$${data.costoEsquites.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }],
+                                [`Pastel de Utilería: ${utileriaText}`, { text: `$${data.costoUtileria.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }],
+                                [`Pastel Comestible: ${comestibleText}`, { text: `$${data.costoComestible.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }],
+                                [`Renta de Bases: ${basesText}`, { text: `$${data.costoBases.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }],
+                                [`Servicio de Montaje: ${montajeText}`, { text: `$${data.costoMontaje.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }]
+                            ]
+                        },
+                        layout: {
+                            fillColor: function (rowIndex) {
+                                return (rowIndex === 0) ? '#fbf6f3' : null;
+                            },
+                            hLineWidth: function () { return 0.5; },
+                            vLineWidth: function () { return 0; },
+                            hLineColor: function () { return '#edc2bd'; }
+                        }
+                    },
+
+                    {
+                        margin: [0, 20, 0, 0],
+                        table: {
+                            widths: ['*', 150],
+                            body: [
+                                [
+                                    { text: 'ESTIMADO TOTAL:', bold: true, fontSize: 13, color: '#48372e' },
+                                    { text: `$${data.total.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, bold: true, fontSize: 13, alignment: 'right', color: '#48372e' }
+                                ]
+                            ]
+                        },
+                        layout: {
+                            fillColor: '#fbf6f3',
+                            hLineWidth: function () { return 0; },
+                            vLineWidth: function () { return 0; }
+                        }
+                    },
+
+                    {
+                        text: 'Este documento es una estimación de presupuesto generada en línea. Sujeta a confirmación de disponibilidad.',
+                        style: 'disclaimer',
+                        margin: [0, 40, 0, 0]
+                    }
+                ],
+                styles: {
+                    header: { fontSize: 24, bold: true, alignment: 'center', color: '#48372e' },
+                    subheader: { fontSize: 8, alignment: 'center', color: '#7b5d49', margin: [0, 4, 0, 0] },
+                    title: { fontSize: 14, bold: true, alignment: 'center', color: '#48372e' },
+                    tableHeader: { bold: true, fontSize: 11, color: '#48372e', padding: 6 },
+                    disclaimer: { fontSize: 9, italics: true, alignment: 'center', color: '#7b5d49' }
+                }
+            };
+
+            pdfMake.createPdf(docDefinition).download(`Cotizacion_Blesiu_${cliente.replace(/\s+/g, '_')}.pdf`);
+        }
+
+        // --- COMPARTIR COMPLETO ---
+        function compartirCotizacion() {
+            let cliente = document.getElementById('nombreCliente').value || 'Cliente';
+            let fecha = document.getElementById('fechaEvento').value || 'Por definir';
+            let lugar = document.getElementById('lugarEvento').value || 'Por definir';
+
+            let utileriaText = document.getElementById('utileria').options[document.getElementById('utileria').selectedIndex].text;
+            let comestibleText = document.getElementById('comestible').options[document.getElementById('comestible').selectedIndex].text;
+            let basesText = document.getElementById('bases').options[document.getElementById('bases').selectedIndex].text;
+            let montajeText = document.getElementById('montaje').options[document.getElementById('montaje').selectedIndex].text;
+            let data = calcularCotizacion();
+
+            let textoMensaje = 
+`✨ *COTIZACIÓN BLESIÚ* ✨
+Pequeños placeres para grandes momentos
+
+👤 *Cliente:* ${cliente}
+📅 *Fecha:* ${fecha}
+📍 *Lugar:* ${lugar}
+
+📋 *DESGLOSE DE SERVICIOS:*
+• Postres (${data.numPostres} pzs): $${data.costoPostres.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN
+• Chilitos y Salados (${data.numChilitos} pzs): $${data.costoChilitos.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN
+• Barra Esquites/Maruchan (${data.numEsquites} pzs): $${data.costoEsquites.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN
+• Pastel Utilería: ${utileriaText} ($${data.costoUtileria.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN)
+• Pastel Comestible: ${comestibleText} ($${data.costoComestible.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN)
+• Bases: ${basesText} ($${data.costoBases.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN)
+• Montaje: ${montajeText} ($${data.costoMontaje.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN)
+
+💰 *ESTIMADO TOTAL:* $${data.total.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN
+
+_Generado automáticamente desde el portal Blesiú._`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Cotización Blesiú',
+                    text: textoMensaje
+                }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(textoMensaje);
+                alert('¡Resumen completo copiado al portapapeles! Listo para pegar en WhatsApp o correo.');
+            }
+        }
+
+        // Event listeners para recalcular automáticamente al cambiar opciones
+        document.querySelectorAll('#cateringForm select, #cateringForm input').forEach(element => {
+            element.addEventListener('input', calcularCotizacion);
+            element.addEventListener('change', calcularCotizacion);
+        });
+
+        // Cálculo inicial
+        calcularCotizacion();
+    </script>
 </body>
 </html>
