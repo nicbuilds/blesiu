@@ -129,14 +129,12 @@
             text-align: center;
             position: relative;
             overflow: hidden;
-            /* Carga de la imagen enfocada en la mitad inferior */
             background-image: url('https://nicbuilds.github.io/blesiu/VE_-19.jpg');
             background-position: center bottom;
             background-size: cover;
             background-repeat: no-repeat;
         }
 
-        /* Capa con difuminado (backdrop-filter) */
         .hero::before {
             content: '';
             position: absolute;
@@ -698,9 +696,15 @@
 
                 <div class="calc-grid">
                     <div class="form-group">
-                        <label for="postres">Cantidad de Postres</label>
+                        <label for="postres">Cantidad de Mini Postres</label>
                         <input type="number" id="postres" min="60" max="5000" placeholder="Mínimo 60, máximo 5000">
                         <span id="postresError" class="error-msg">Ingresa entre 60 y 5000 piezas.</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="postresEmplatados">Postre Emplatado</label>
+                        <input type="number" id="postresEmplatados" min="30" max="5000" placeholder="Mínimo 30 piezas">
+                        <span id="emplatadosError" class="error-msg">Ingresa entre 30 y 5000 piezas.</span>
                     </div>
 
                     <div class="form-group">
@@ -709,7 +713,7 @@
                         <span id="chilitosError" class="error-msg">Ingresa entre 60 y 5000 piezas.</span>
                     </div>
 
-                    <div class="form-group full-width">
+                    <div class="form-group">
                         <label for="barraEsquites">Barra de Esquites / Maruchan / Tostilocos</label>
                         <input type="number" id="barraEsquites" min="300" max="5000" placeholder="Mínimo 300, máximo 5000 unidades">
                         <span id="esquitesError" class="error-msg">Ingresa entre 300 y 5000 unidades.</span>
@@ -719,8 +723,8 @@
                         <label for="utileria">Pastel de Utilería</label>
                         <select id="utileria">
                             <option value="0">Sin pastel de utilería</option>
-                            <option value="2200">2 Pisos ($2,200)</option>
-                            <option value="2600">3 Pisos ($2,600)</option>
+                            <option value="2200">2 Pisos</option>
+                            <option value="2600">3 Pisos</option>
                         </select>
                     </div>
 
@@ -728,9 +732,9 @@
                         <label for="comestible">Pastel Comestible (Plancha)</label>
                         <select id="comestible">
                             <option value="0" data-personas="0">Sin pastel comestible</option>
-                            <option value="1350" data-personas="50">50 personas ($1,350)</option>
-                            <option value="2450" data-personas="100">100 personas ($2,450)</option>
-                            <option value="3800" data-personas="150">150 personas ($3,800)</option>
+                            <option value="1350" data-personas="50">50 personas</option>
+                            <option value="2450" data-personas="100">100 personas</option>
+                            <option value="3800" data-personas="150">150 personas</option>
                         </select>
                     </div>
 
@@ -738,7 +742,7 @@
                         <label for="bases">Bases para postres</label>
                         <select id="bases">
                             <option value="0">Sin renta de bases</option>
-                            <option value="1400">Incluir bases ($1,400)</option>
+                            <option value="1400">Incluir bases</option>
                         </select>
                     </div>
 
@@ -746,7 +750,7 @@
                         <label for="montaje">Servicio de Montaje</label>
                         <select id="montaje">
                             <option value="0">Sin montaje</option>
-                            <option value="3500">Montaje profesional ($3,500)</option>
+                            <option value="3500">Montaje profesional</option>
                         </select>
                     </div>
                 </div>
@@ -823,7 +827,6 @@
             updateCarousel();
         });
 
-        // Cambio automático de diapositivas cada 5 segundos
         setInterval(() => {
             currentSlide = (currentSlide + 1) % totalSlides;
             updateCarousel();
@@ -831,7 +834,7 @@
 
         // --- LÓGICA DEL COTIZADOR ---
         function calcularCotizacion() {
-            // 1. Postres
+            // 1. Postres Tradicionales
             let postresInput = document.getElementById('postres');
             let postresError = document.getElementById('postresError');
             let numPostres = parseInt(postresInput.value) || 0;
@@ -848,7 +851,24 @@
                 postresError.style.display = 'none';
             }
 
-            // 2. Chilitos y Salados
+            // 2. Postres Emplatados ($60 c/u, min 30 pzs)
+            let emplatadosInput = document.getElementById('postresEmplatados');
+            let emplatadosError = document.getElementById('emplatadosError');
+            let numEmplatados = parseInt(emplatadosInput.value) || 0;
+            let costoEmplatados = 0;
+
+            if (emplatadosInput.value !== "") {
+                if (numEmplatados < 30 || numEmplatados > 5000) {
+                    emplatadosError.style.display = 'block';
+                } else {
+                    emplatadosError.style.display = 'none';
+                    costoEmplatados = numEmplatados * 60;
+                }
+            } else {
+                emplatadosError.style.display = 'none';
+            }
+
+            // 3. Chilitos y Salados
             let chilitosInput = document.getElementById('chilitos');
             let chilitosError = document.getElementById('chilitosError');
             let numChilitos = parseInt(chilitosInput.value) || 0;
@@ -865,7 +885,7 @@
                 chilitosError.style.display = 'none';
             }
 
-            // 3. Barra de Esquites
+            // 4. Barra de Esquites
             let esquitesInput = document.getElementById('barraEsquites');
             let esquitesError = document.getElementById('esquitesError');
             let numEsquites = parseInt(esquitesInput.value) || 0;
@@ -882,23 +902,24 @@
                 esquitesError.style.display = 'none';
             }
 
-            // 4. Utilería
+            // 5. Utilería
             let costoUtileria = parseFloat(document.getElementById('utileria').value) || 0;
 
-            // 5. Comestible
+            // 6. Comestible
             let selectComestible = document.getElementById('comestible');
             let costoComestible = parseFloat(selectComestible.value) || 0;
 
-            // 6. Bases y Montaje
+            // 7. Bases y Montaje
             let costoBases = parseFloat(document.getElementById('bases').value) || 0;
             let costoMontaje = parseFloat(document.getElementById('montaje').value) || 0;
 
-            let total = costoPostres + costoChilitos + costoEsquites + costoUtileria + costoComestible + costoBases + costoMontaje;
+            let total = costoPostres + costoEmplatados + costoChilitos + costoEsquites + costoUtileria + costoComestible + costoBases + costoMontaje;
 
             document.getElementById('totalEstimado').textContent = '$' + total.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' MXN';
 
             return {
                 numPostres, costoPostres,
+                numEmplatados, costoEmplatados,
                 numChilitos, costoChilitos,
                 numEsquites, costoEsquites,
                 costoUtileria,
@@ -954,6 +975,7 @@
                                     { text: 'Importe', style: 'tableHeader', alignment: 'right' }
                                 ],
                                 [`Postres individuales (${data.numPostres} piezas)`, { text: `$${data.costoPostres.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }],
+                                [`Postres Emplatados (${data.numEmplatados} piezas)`, { text: `$${data.costoEmplatados.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }],
                                 [`Chilitos y Salados (${data.numChilitos} piezas)`, { text: `$${data.costoChilitos.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }],
                                 [`Barra de Esquites / Maruchan / Tostilocos (${data.numEsquites} pzs)`, { text: `$${data.costoEsquites.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }],
                                 [`Pastel de Utilería: ${utileriaText}`, { text: `$${data.costoUtileria.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }],
@@ -1030,6 +1052,7 @@ Pequeños placeres para grandes momentos
 
 📋 *DESGLOSE DE SERVICIOS:*
 • Postres (${data.numPostres} pzs): $${data.costoPostres.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN
+• Postres Emplatados (${data.numEmplatados} pzs): $${data.costoEmplatados.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN
 • Chilitos y Salados (${data.numChilitos} pzs): $${data.costoChilitos.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN
 • Barra Esquites/Maruchan (${data.numEsquites} pzs): $${data.costoEsquites.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN
 • Pastel Utilería: ${utileriaText} ($${data.costoUtileria.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN)
