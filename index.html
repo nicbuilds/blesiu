@@ -476,6 +476,51 @@
         }
 
         /* ==========================================
+           BOTONES FLOTANTES (WHATSAPP Y LLAMADA)
+           ========================================== */
+        .floating-buttons-container {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 9999;
+        }
+
+        .float-btn {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+        }
+
+        .float-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+        }
+
+        .float-btn svg {
+            width: 28px;
+            height: 28px;
+            fill: currentColor;
+        }
+
+        .float-btn.whatsapp {
+            background-color: #25d366;
+        }
+
+        .float-btn.call {
+            background-color: var(--color-dark-brown);
+        }
+
+        /* ==========================================
            FOOTER
            ========================================== */
         footer {
@@ -517,6 +562,9 @@
             .form-group.full-width { grid-column: span 1; }
             .calc-actions { flex-direction: column; }
             .carousel-slide img { height: 320px; }
+            .floating-buttons-container { bottom: 15px; right: 15px; }
+            .float-btn { width: 50px; height: 50px; }
+            .float-btn svg { width: 24px; height: 24px; }
         }
     </style>
 </head>
@@ -543,7 +591,7 @@
         <div class="hero-content">
             <span class="badge-estd">Estd. 2012</span>
             <h1>Pequeños placeres para grandes momentos</h1>
-            <p>Crear experiencias memorables a través de mesas de postres y repostería para eventos, con un enfoque en el detalle, la calidad y el buen gusto.</p>
+            <p>Descubre el refinamiento, la calidez y el detalle artesanal creados para elevar cada instante de tu día.</p>
             <a href="#cotizador" class="cta-button">Cotizar Evento</a>
         </div>
     </section>
@@ -558,8 +606,8 @@
             </div>
             <div class="about-text">
                 <h2>Sobriedad, refinamiento y carácter clásico</h2>
-                <p>Ofrecer repostería de alta calidad para eventos sociales, cuidando cada detalle con pasión, puntualidad y dedicación, para acompañar momentos únicos en la vida de nuestros clientes.</p>
-                <p></p>
+                <p>Nuestra propuesta nace de la búsqueda de la belleza simple y bien hecha. Con proporciones armónicas y un estilo elegante sin caer en lo ornamental, creamos piezas e insumos cuidados minuciosamente.</p>
+                <p>Conectamos con lo artesanal y lo orgánico, recordando la tierra y valorando los ingredientes y materiales naturales en su forma más pura.</p>
             </div>
         </div>
     </section>
@@ -574,16 +622,16 @@
         <div class="carousel-container">
             <div class="carousel-track" id="carouselTrack">
                 <div class="carousel-slide">
-                    <img src="https://nicbuilds.github.io/blesiu/VE_-1.jpg" alt="Nuestra Esencia 1">
+                    <img src="https://github.com/nicbuilds/blesiu/VE_-1.jpg" alt="Nuestra Esencia 1">
                 </div>
                 <div class="carousel-slide">
-                    <img src="https://nicbuilds.github.io/blesiu/VE_-12.jpg" alt="Nuestra Esencia 2">
+                    <img src="https://github.com/nicbuilds/blesiu/VE_-12.jpg" alt="Nuestra Esencia 2">
                 </div>
                 <div class="carousel-slide">
-                    <img src="https://nicbuilds.github.io/blesiu/VE_-15.jpg" alt="Nuestra Esencia 3">
+                    <img src="https://github.com/nicbuilds/blesiu/VE_-15.jpg" alt="Nuestra Esencia 3">
                 </div>
                 <div class="carousel-slide">
-                    <img src="https://nicbuilds.github.io/blesiu/VE_-17.jpg" alt="Nuestra Esencia 4">
+                    <img src="https://github.com/nicbuilds/blesiu/VE_-17.jpg" alt="Nuestra Esencia 4">
                 </div>
             </div>
             <button class="carousel-btn prev" id="prevBtn">&#10094;</button>
@@ -693,6 +741,22 @@
             </form>
         </div>
     </section>
+
+    <!-- Botones Flotantes de Contacto -->
+    <div class="floating-buttons-container">
+        <!-- Botón Llamada -->
+        <a href="tel:+529993945283" class="float-btn call" title="Llamar a Blesiú">
+            <svg viewBox="0 0 24 24">
+                <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+            </svg>
+        </a>
+        <!-- Botón WhatsApp -->
+        <a href="https://wa.me/529993945283" target="_blank" class="float-btn whatsapp" title="Chat de WhatsApp">
+            <svg viewBox="0 0 24 24">
+                <path d="M12.031 0C5.394 0 0 5.394 0 12.031c0 2.12.553 4.18 1.604 5.996L.07 24l6.107-1.602a11.96 11.96 0 005.854 1.523h.005c6.636 0 12.03-5.394 12.03-12.03C24.066 5.394 18.67 0 12.031 0zm0 22.083h-.004a9.982 9.982 0 01-5.088-1.397l-.365-.217-3.782.992 1.009-3.687-.238-.379a9.96 9.96 0 01-1.527-5.364c0-5.514 4.486-10 10-10 5.514 0 10 4.486 10 10s-4.486 10-10 10zm5.485-7.495c-.301-.15-1.782-.879-2.057-.979-.275-.101-.476-.15-.676.15-.2.301-.776.979-.951 1.18-.175.2-.351.226-.652.076-.301-.15-1.272-.469-2.424-1.496-.897-.798-1.502-1.784-1.677-2.084-.175-.301-.019-.463.131-.613.136-.135.301-.351.451-.526.15-.175.201-.301.301-.502.1-.2.05-.376-.025-.526-.075-.15-.676-1.63-.927-2.23-.243-.585-.49-.505-.676-.515-.175-.01-.376-.01-.576-.01s-.526.075-.802.376c-.275.301-1.052 1.028-1.052 2.508 0 1.48 1.077 2.909 1.227 3.11.15.2 2.119 3.235 5.134 4.538.717.31 1.277.496 1.713.634.72.228 1.375.196 1.893.118.578-.087 1.782-.727 2.033-1.428.25-.702.25-1.304.175-1.428-.075-.126-.275-.201-.576-.351z"/>
+            </svg>
+        </a>
+    </div>
 
     <!-- Pie de página -->
     <footer>
