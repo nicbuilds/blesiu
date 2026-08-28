@@ -1,4 +1,4 @@
-Put your HTML text here<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -203,7 +203,7 @@ Put your HTML text here<!DOCTYPE html>
         }
 
         /* ==========================================
-           SECCIÓN SOBRE LA MARCA
+           SECCIÓN SOBRE LA MARCA (Inner Carousel)
            ========================================== */
         .about {
             padding: 6rem 2rem;
@@ -229,9 +229,26 @@ Put your HTML text here<!DOCTYPE html>
         .about-image-inner {
             background-color: var(--color-cream-bg);
             border-radius: 50% / 40%;
-            padding: 1rem 0.5rem;
+            height: 350px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .about-carousel-track {
+            display: flex;
+            height: 100%;
+            width: 100%;
+            transition: transform 0.6s ease-in-out;
+        }
+
+        .about-carousel-slide {
+            min-width: 100%;
+            height: 100%;
+            display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
@@ -244,6 +261,41 @@ Put your HTML text here<!DOCTYPE html>
             margin: 0 auto;
             transform: scale(2.2);
         }
+
+        .about-slide-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Botones del minicarrusel */
+        .about-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(251, 246, 243, 0.7);
+            border: 1px solid var(--color-soft-pink);
+            color: var(--color-dark-brown);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .about-nav-btn:hover {
+            background: var(--color-dark-brown);
+            color: var(--color-white);
+        }
+
+        .about-nav-btn.prev { left: 10px; }
+        .about-nav-btn.next { right: 10px; }
 
         .about-text h2 {
             font-size: 2.5rem;
@@ -618,18 +670,37 @@ Put your HTML text here<!DOCTYPE html>
         </div>
     </section>
 
-    <!-- Sección Sobre la Marca -->
+    <!-- Sección Sobre la Marca (Con Carrusel Interior) -->
     <section class="about" id="nosotros">
         <div class="about-grid">
             <div class="about-image-frame">
                 <div class="about-image-inner">
-                    <img src="https://nicbuilds.github.io/blesiu/b1.png" alt="Blesiú Monogram" class="brand-monogram-img">
+                    <div class="about-carousel-track" id="aboutTrack">
+                        <!-- Imagen 1: Logo Monograma Original -->
+                        <div class="about-carousel-slide">
+                            <img src="https://nicbuilds.github.io/blesiu/b1.png" alt="Blesiú Monogram" class="brand-monogram-img">
+                        </div>
+                        <!-- Imagen 2 -->
+                        <div class="about-carousel-slide">
+                            <img src="https://nicbuilds.github.io/blesiu/mini1_compressed.jpg" alt="Blesiú Mini 1" class="about-slide-img">
+                        </div>
+                        <!-- Imagen 3 -->
+                        <div class="about-carousel-slide">
+                            <img src="https://nicbuilds.github.io/blesiu/mini2_compressed.jpg" alt="Blesiú Mini 2" class="about-slide-img">
+                        </div>
+                        <!-- Imagen 4 -->
+                        <div class="about-carousel-slide">
+                            <img src="https://nicbuilds.github.io/blesiu/mini3_compressed.jpg" alt="Blesiú Mini 3" class="about-slide-img">
+                        </div>
+                    </div>
+                    <!-- Botones de navegación interna -->
+                    <button class="about-nav-btn prev" id="aboutPrevBtn">&#10094;</button>
+                    <button class="about-nav-btn next" id="aboutNextBtn">&#10095;</button>
                 </div>
             </div>
             <div class="about-text">
                 <h2>Diseño de experiencias</h2>
                 <p>Ofrecemos repostería para eventos sociales cuidando la elegancia y el sabor para acompañar momentos llenos de emociones</p>
-                <p></p>
             </div>
         </div>
     </section>
@@ -795,9 +866,35 @@ Put your HTML text here<!DOCTYPE html>
         </div>
     </footer>
 
-    <!-- Lógica del Carrusel y Cotizador -->
+    <!-- Lógica de los Carruseles y Cotizador -->
     <script>
-        // --- LÓGICA DEL CARRUSEL ---
+        // --- LÓGICA DEL CARRUSEL INTERNO (ÁREA SOBRE LA MARCA "B") ---
+        const aboutTrack = document.getElementById('aboutTrack');
+        const aboutPrevBtn = document.getElementById('aboutPrevBtn');
+        const aboutNextBtn = document.getElementById('aboutNextBtn');
+        let currentAboutSlide = 0;
+        const totalAboutSlides = document.querySelectorAll('.about-carousel-slide').length;
+
+        function updateAboutCarousel() {
+            aboutTrack.style.transform = `translateX(-${currentAboutSlide * 100}%)`;
+        }
+
+        aboutNextBtn.addEventListener('click', () => {
+            currentAboutSlide = (currentAboutSlide + 1) % totalAboutSlides;
+            updateAboutCarousel();
+        });
+
+        aboutPrevBtn.addEventListener('click', () => {
+            currentAboutSlide = (currentAboutSlide - 1 + totalAboutSlides) % totalAboutSlides;
+            updateAboutCarousel();
+        });
+
+        setInterval(() => {
+            currentAboutSlide = (currentAboutSlide + 1) % totalAboutSlides;
+            updateAboutCarousel();
+        }, 4500);
+
+        // --- LÓGICA DEL CARRUSEL PRINCIPAL ---
         const track = document.getElementById('carouselTrack');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
