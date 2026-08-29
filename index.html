@@ -1021,9 +1021,33 @@
                     },
 
                     {
+                        margin: [0, 20, 0, 0],
+                        table: {
+                            widths: ['*'],
+                            body: [
+                                [
+                                    {
+                                        stack: [
+                                            { text: 'CONDICIONES DE PAGO:', bold: true, fontSize: 10, color: '#48372e', margin: [0, 0, 0, 4] },
+                                            { text: 'Trabajamos bajo contrato con el 20% de anticipo. El 50% 20 días antes del evento y el 30% restante 2 días antes de la fecha del evento.', fontSize: 9.5, color: '#48372e' }
+                                        ]
+                                    }
+                                ]
+                            ]
+                        },
+                        layout: {
+                            fillColor: '#ffffff',
+                            hLineWidth: function () { return 1; },
+                            vLineWidth: function () { return 1; },
+                            hLineColor: function () { return '#edc2bd'; },
+                            vLineColor: function () { return '#edc2bd'; }
+                        }
+                    },
+
+                    {
                         text: 'Este documento es una estimación de presupuesto generada en línea. Sujeta a confirmación de disponibilidad.',
                         style: 'disclaimer',
-                        margin: [0, 40, 0, 0]
+                        margin: [0, 25, 0, 0]
                     }
                 ],
                 styles: {
@@ -1069,6 +1093,9 @@ Pequeños placeres para grandes momentos
 • Montaje: ${montajeText} ($${data.costoMontaje.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN)
 
 💰 *ESTIMADO TOTAL:* $${data.total.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN
+
+📌 *CONDICIONES DE PAGO:*
+Trabajamos bajo contrato con el 20% de anticipo. El 50% 20 días antes del evento y el 30% restante 2 días antes de la fecha del evento.
 
 _Generado automáticamente desde el portal Blesiú._`;
 
