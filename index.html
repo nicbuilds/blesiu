@@ -245,6 +245,10 @@
             transform: scale(2.2);
         }
 
+        .about-text {
+            text-align: center;
+        }
+
         .about-text h2 {
             font-size: 2.5rem;
             margin-bottom: 1.5rem;
@@ -361,7 +365,7 @@
         }
 
         /* ==========================================
-           COTIZADOR DE EVENTOS
+           COTIZADOR DE EVENTOS CON FLETE Y MAPA
            ========================================== */
         .calculator-section {
             padding: 6rem 2rem;
@@ -447,12 +451,37 @@
             display: none;
         }
 
+        .flete-info {
+            font-size: 0.85rem;
+            color: #7b5d49;
+            margin-top: 0.3rem;
+            font-weight: 500;
+        }
+
+        /* Contenedor del Mapa Interactivo */
+        #map {
+            width: 100%;
+            height: 280px;
+            border-radius: 8px;
+            border: 1px solid #edc2bd;
+            margin-top: 0.8rem;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+        }
+
         .calc-summary {
             margin-top: 2rem;
             padding: 1.5rem;
             background-color: #fbf6f3;
             border-radius: 8px;
             border-left: 4px solid #edc2bd;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
         }
 
         .summary-total {
@@ -462,6 +491,9 @@
             font-size: 1.4rem;
             font-family: 'Playfair Display', serif;
             font-weight: bold;
+            border-top: 1px solid rgba(72, 55, 46, 0.1);
+            padding-top: 0.8rem;
+            margin-top: 0.5rem;
         }
 
         .calc-actions {
@@ -495,6 +527,15 @@
         .btn-action.btn-primary-action {
             background-color: var(--color-dark-brown);
             color: var(--color-white);
+        }
+
+        /* Estilos autocompletado de Google Places */
+        .pac-container {
+            border-radius: 6px;
+            border: 1px solid #edc2bd;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            z-index: 10000 !important;
         }
 
         /* ==========================================
@@ -628,8 +669,7 @@
             </div>
             <div class="about-text">
                 <h2>Diseño de experiencias</h2>
-                <p>Ofrecemos repostería para eventos sociales cuidando la elegancia y el sabor para acompañar momentos llenos de emociones</p>
-                <p></p>
+                <p>Ofrecemos repostería para eventos sociales cuidando la <strong>elegancia</strong> y el <strong>sabor</strong> para acompañar momentos llenos de <strong>emociones</strong></p>
             </div>
         </div>
     </section>
@@ -676,15 +716,16 @@
         </div>
     </section>
 
-    <!-- Cotizador Integrado Actualizado -->
+    <!-- Cotizador Integrado -->
     <section class="calculator-section" id="cotizador">
         <div class="calculator-container">
             <h2 class="calc-title">Cotiza tu Evento</h2>
             <p class="calc-subtitle">Pasteles decorados y cotizaciones personalizadas solicitar por Whatsapp</p>
 
             <form id="cateringForm">
+                <!-- Datos básicos del evento -->
                 <div class="calc-grid">
-                    <div class="form-group full-width">
+                    <div class="form-group">
                         <label for="nombreCliente">Nombre del Cliente</label>
                         <input type="text" id="nombreCliente" placeholder="Ej. María García">
                     </div>
@@ -693,15 +734,11 @@
                         <label for="fechaEvento">Fecha del Evento</label>
                         <input type="date" id="fechaEvento">
                     </div>
-
-                    <div class="form-group">
-                        <label for="lugarEvento">Lugar / Dirección del Evento</label>
-                        <input type="text" id="lugarEvento" placeholder="Ej. Jardín Las Rosas">
-                    </div>
                 </div>
 
                 <hr class="calc-divider">
 
+                <!-- Selección de productos y servicios -->
                 <div class="calc-grid">
                     <div class="form-group">
                         <label for="postres">Cantidad de Mini Postres</label>
@@ -763,7 +800,25 @@
                     </div>
                 </div>
 
+                <hr class="calc-divider">
+
+                <!-- Sección Independiente de Ubicación y Mapa (al final de las opciones) -->
+                <div class="calc-grid">
+                    <div class="form-group full-width">
+                        <label for="lugarEvento">Ubicación del Evento (Buscador & Mapa)</label>
+                        <input type="text" id="lugarEvento" placeholder="Escribe la dirección o el salón de eventos...">
+                        <span id="fleteInfo" class="flete-info">Selecciona un lugar para calcular la distancia y costo del flete.</span>
+                        <!-- Mapa interactivo de Google Maps -->
+                        <div id="map"></div>
+                    </div>
+                </div>
+
+                <!-- Resumen Financiero -->
                 <div class="calc-summary">
+                    <div class="summary-row">
+                        <span>Cálculo de Flete / Traslado:</span>
+                        <span id="costoFleteTxt">$0.00 MXN</span>
+                    </div>
                     <div class="summary-total">
                         <span>Estimado Total:</span>
                         <span id="totalEstimado">$0.00 MXN</span>
@@ -803,7 +858,7 @@
         </div>
     </footer>
 
-    <!-- Lógica del Carrusel y Cotizador -->
+    <!-- Scripts: Carrusel, Google Maps con Marcador, Autocompletado, Flete y Cotizador -->
     <script>
         // --- LÓGICA DEL CARRUSEL ---
         const track = document.getElementById('carouselTrack');
@@ -839,6 +894,84 @@
             currentSlide = (currentSlide + 1) % totalSlides;
             updateCarousel();
         }, 5000);
+
+        // --- GOOGLE MAPS, AUTOCOMPLETE Y CÁLCULO DE FLETE ---
+        let map, marker;
+        let origenBlesiu = "Mérida, Yucatán, México"; // Dirección base de Blesiú
+        let meridaCoords = { lat: 20.9676, lng: -89.5926 }; // Coordenadas iniciales (Mérida)
+        let costoFleteGlobal = 0;
+        let distanciaKmGlobal = 0;
+
+        function initGoogleMapAndPlaces() {
+            // Inicializar Mapa centrado en Mérida
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: meridaCoords,
+                zoom: 12,
+                styles: [
+                    {
+                        "featureType": "administrative",
+                        "elementType": "labels.text.fill",
+                        "stylers": [{ "color": "#48372e" }]
+                    }
+                ]
+            });
+
+            // Marcador inicial
+            marker = new google.maps.Marker({
+                map: map,
+                position: meridaCoords,
+                visible: false
+            });
+
+            // Inicializar Google Autocomplete en el campo de Ubicación (al final)
+            let inputLugar = document.getElementById('lugarEvento');
+            if (!inputLugar) return;
+
+            let autocomplete = new google.maps.places.Autocomplete(inputLugar, {
+                types: ['geocode', 'establishment']
+            });
+
+            autocomplete.addListener('place_changed', function () {
+                let place = autocomplete.getPlace();
+                if (place.geometry) {
+                    // Mover mapa y colocar marcador
+                    map.setCenter(place.geometry.location);
+                    map.setZoom(15);
+                    marker.setPosition(place.geometry.location);
+                    marker.setVisible(true);
+
+                    // Calcular distancia y flete
+                    calcularDistanciaYFlete(place.geometry.location);
+                }
+            });
+        }
+
+        function calcularDistanciaYFlete(destinoCoords) {
+            let service = new google.maps.DistanceMatrixService();
+            service.getDistanceMatrix({
+                origins: [origenBlesiu],
+                destinations: [destinoCoords],
+                travelMode: 'DRIVING',
+                unitSystem: google.maps.UnitSystem.METRIC
+            }, function (response, status) {
+                if (status === 'OK' && response.rows[0].elements[0].status === 'OK') {
+                    let distanciaMetros = response.rows[0].elements[0].distance.value;
+                    distanciaKmGlobal = (distanciaMetros / 1000).toFixed(1);
+
+                    // Tarifa de flete: Base de $150 MXN + $15 MXN por km
+                    let costoBase = 150;
+                    let costoKm = 15;
+                    costoFleteGlobal = costoBase + (distanciaKmGlobal * costoKm);
+
+                    document.getElementById('fleteInfo').textContent = `Distancia aproximada: ${distanciaKmGlobal} km desde Blesiú`;
+                } else {
+                    costoFleteGlobal = 0;
+                    distanciaKmGlobal = 0;
+                    document.getElementById('fleteInfo').textContent = "No se pudo calcular la distancia del flete.";
+                }
+                calcularCotizacion();
+            });
+        }
 
         // --- LÓGICA DEL COTIZADOR ---
         function calcularCotizacion() {
@@ -921,7 +1054,11 @@
             let costoBases = parseFloat(document.getElementById('bases').value) || 0;
             let costoMontaje = parseFloat(document.getElementById('montaje').value) || 0;
 
-            let total = costoPostres + costoEmplatados + costoChilitos + costoEsquites + costoUtileria + costoComestible + costoBases + costoMontaje;
+            // 8. Flete
+            let costoFlete = costoFleteGlobal;
+            document.getElementById('costoFleteTxt').textContent = '$' + costoFlete.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' MXN';
+
+            let total = costoPostres + costoEmplatados + costoChilitos + costoEsquites + costoUtileria + costoComestible + costoBases + costoMontaje + costoFlete;
 
             document.getElementById('totalEstimado').textContent = '$' + total.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' MXN';
 
@@ -934,6 +1071,7 @@
                 costoComestible,
                 costoBases,
                 costoMontaje,
+                costoFlete,
                 total
             };
         }
@@ -989,7 +1127,8 @@
                                 [`Pastel de Utilería: ${utileriaText}`, { text: `$${data.costoUtileria.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }],
                                 [`Pastel Comestible: ${comestibleText}`, { text: `$${data.costoComestible.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }],
                                 [`Renta de Bases: ${basesText}`, { text: `$${data.costoBases.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }],
-                                [`Servicio de Montaje: ${montajeText}`, { text: `$${data.costoMontaje.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }]
+                                [`Servicio de Montaje: ${montajeText}`, { text: `$${data.costoMontaje.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }],
+                                [`Envío y Flete de Traslado (${distanciaKmGlobal} km)`, { text: `$${data.costoFlete.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }]
                             ]
                         },
                         layout: {
@@ -1091,6 +1230,7 @@ Pequeños placeres para grandes momentos
 • Pastel Comestible: ${comestibleText} ($${data.costoComestible.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN)
 • Bases: ${basesText} ($${data.costoBases.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN)
 • Montaje: ${montajeText} ($${data.costoMontaje.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN)
+• Flete y Traslado (${distanciaKmGlobal} km): $${data.costoFlete.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN
 
 💰 *ESTIMADO TOTAL:* $${data.total.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN
 
@@ -1119,5 +1259,8 @@ _Generado automáticamente desde el portal Blesiú._`;
         // Cálculo inicial
         calcularCotizacion();
     </script>
+
+    <!-- API Google Maps & Places -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDBOWW1tQ6B2Olhk0uXSaCMdeUv0_lw27w&libraries=places&callback=initGoogleMapAndPlaces" async defer></script>
 </body>
 </html>
