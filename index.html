@@ -802,13 +802,12 @@
 
                 <hr class="calc-divider">
 
-                <!-- Sección Independiente de Ubicación y Mapa (al final de las opciones) -->
+                <!-- Ubicación y Mapa -->
                 <div class="calc-grid">
                     <div class="form-group full-width">
                         <label for="lugarEvento">Ubicación del Evento (Buscador & Mapa)</label>
                         <input type="text" id="lugarEvento" placeholder="Escribe la dirección o el salón de eventos...">
                         <span id="fleteInfo" class="flete-info">Selecciona un lugar para calcular la distancia y costo del flete.</span>
-                        <!-- Mapa interactivo de Google Maps -->
                         <div id="map"></div>
                     </div>
                 </div>
@@ -897,13 +896,13 @@
 
         // --- GOOGLE MAPS, AUTOCOMPLETE Y CÁLCULO DE FLETE ---
         let map, marker;
-        let origenBlesiu = "Mérida, Yucatán, México"; // Dirección base de Blesiú
-        let meridaCoords = { lat: 20.9676, lng: -89.5926 }; // Coordenadas iniciales (Mérida)
+        // Origen interno para cálculo exacto sin mostrarlo al cliente
+        const ORIGEN_BLESIU = "Calle 19 93A Chuburna de hidalgo Merida Yucatan";
+        let meridaCoords = { lat: 20.9676, lng: -89.5926 };
         let costoFleteGlobal = 0;
         let distanciaKmGlobal = 0;
 
         function initGoogleMapAndPlaces() {
-            // Inicializar Mapa centrado en Mérida
             map = new google.maps.Map(document.getElementById('map'), {
                 center: meridaCoords,
                 zoom: 12,
@@ -916,14 +915,12 @@
                 ]
             });
 
-            // Marcador inicial
             marker = new google.maps.Marker({
                 map: map,
                 position: meridaCoords,
                 visible: false
             });
 
-            // Inicializar Google Autocomplete en el campo de Ubicación (al final)
             let inputLugar = document.getElementById('lugarEvento');
             if (!inputLugar) return;
 
@@ -934,13 +931,11 @@
             autocomplete.addListener('place_changed', function () {
                 let place = autocomplete.getPlace();
                 if (place.geometry) {
-                    // Mover mapa y colocar marcador
                     map.setCenter(place.geometry.location);
                     map.setZoom(15);
                     marker.setPosition(place.geometry.location);
                     marker.setVisible(true);
 
-                    // Calcular distancia y flete
                     calcularDistanciaYFlete(place.geometry.location);
                 }
             });
@@ -949,23 +944,17 @@
         function calcularDistanciaYFlete(destinoCoords) {
             let service = new google.maps.DistanceMatrixService();
             service.getDistanceMatrix({
-                origins: [origenBlesiu],
+                origins: [ORIGEN_BLESIU],
                 destinations: [destinoCoords],
                 travelMode: 'DRIVING',
                 unitSystem: google.maps.UnitSystem.METRIC
             }, function (response, status) {
                 if (status === 'OK' && response.rows[0].elements[0].status === 'OK') {
                     let distanciaMetros = response.rows[0].elements[0].distance.value;
-                    distanciaKmGlobal = (distanciaMetros / 1000).toFixed(1);
+                    distanciaKmGlobal = (distanciaMetros / 1000);
 
-                    // Tarifa de flete: Base de $150 MXN + $15 MXN por km
-                    let costoBase = 150;
-                    let costoKm = 15;
-                    costoFleteGlobal = costoBase + (distanciaKmGlobal * costoKm);
-
-                    document.getElementById('fleteInfo').textContent = `Distancia aproximada: ${distanciaKmGlobal} km desde Blesiú`;
+                    document.getElementById('fleteInfo').textContent = `Distancia calculada: ${distanciaKmGlobal.toFixed(1)} km`;
                 } else {
-                    costoFleteGlobal = 0;
                     distanciaKmGlobal = 0;
                     document.getElementById('fleteInfo').textContent = "No se pudo calcular la distancia del flete.";
                 }
@@ -1054,7 +1043,25 @@
             let costoBases = parseFloat(document.getElementById('bases').value) || 0;
             let costoMontaje = parseFloat(document.getElementById('montaje').value) || 0;
 
-            // 8. Flete
+            // 8. Cálculo de Envío / Flete: $700 primeros 10 km, $25 por km adicional
+            // Si NO lleva montaje se cobra únicamente el 55% del envío
+            let costoFleteBase = 0;
+            if (distanciaKmGlobal > 0) {
+                if (distanciaKmGlobal <= 10) {
+                    costoFleteBase = 700;
+                } else {
+                    costoFleteBase = 700 + ((distanciaKmGlobal - 10) * 25);
+                }
+
+                if (costoMontaje === 0) {
+                    costoFleteGlobal = costoFleteBase * 0.55;
+                } else {
+                    costoFleteGlobal = costoFleteBase;
+                }
+            } else {
+                costoFleteGlobal = 0;
+            }
+
             let costoFlete = costoFleteGlobal;
             document.getElementById('costoFleteTxt').textContent = '$' + costoFlete.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' MXN';
 
@@ -1128,7 +1135,7 @@
                                 [`Pastel Comestible: ${comestibleText}`, { text: `$${data.costoComestible.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }],
                                 [`Renta de Bases: ${basesText}`, { text: `$${data.costoBases.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }],
                                 [`Servicio de Montaje: ${montajeText}`, { text: `$${data.costoMontaje.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }],
-                                [`Envío y Flete de Traslado (${distanciaKmGlobal} km)`, { text: `$${data.costoFlete.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }]
+                                [`Envío y Flete de Traslado (${distanciaKmGlobal.toFixed(1)} km)`, { text: `$${data.costoFlete.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`, alignment: 'right' }]
                             ]
                         },
                         layout: {
@@ -1230,7 +1237,7 @@ Pequeños placeres para grandes momentos
 • Pastel Comestible: ${comestibleText} ($${data.costoComestible.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN)
 • Bases: ${basesText} ($${data.costoBases.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN)
 • Montaje: ${montajeText} ($${data.costoMontaje.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN)
-• Flete y Traslado (${distanciaKmGlobal} km): $${data.costoFlete.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN
+• Flete y Traslado (${distanciaKmGlobal.toFixed(1)} km): $${data.costoFlete.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN
 
 💰 *ESTIMADO TOTAL:* $${data.total.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN
 
