@@ -1044,7 +1044,8 @@
             let costoMontaje = parseFloat(document.getElementById('montaje').value) || 0;
 
             // 8. Cálculo de Envío / Flete: $700 primeros 10 km, $25 por km adicional
-            // Si NO lleva montaje se cobra únicamente el 55% del envío
+            // Si se selecciona montaje O bases y platones se cobra 2 veces el flete base
+            // Si NO lleva montaje ni bases se cobra únicamente el 55% del envío base
             let costoFleteBase = 0;
             if (distanciaKmGlobal > 0) {
                 if (distanciaKmGlobal <= 10) {
@@ -1053,10 +1054,10 @@
                     costoFleteBase = 700 + ((distanciaKmGlobal - 10) * 25);
                 }
 
-                if (costoMontaje === 0) {
-                    costoFleteGlobal = costoFleteBase * 0.55;
+                if (costoMontaje > 0 || costoBases > 0) {
+                    costoFleteGlobal = costoFleteBase * 2;
                 } else {
-                    costoFleteGlobal = costoFleteBase;
+                    costoFleteGlobal = costoFleteBase * 0.55;
                 }
             } else {
                 costoFleteGlobal = 0;
