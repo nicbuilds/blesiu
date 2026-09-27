@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blesiú | Pequeños placeres para grandes momentos</title>
+    <!-- Tipografías de Google Fonts: Playfair Display y Sans-Serif para cuerpo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Librería PDFMake (Generación vectorial directa) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+    <style>
+        /* ==========================================
+           VARIABLES DE MARCA (Manual Blesiú)
+           ========================================== */
+        :root {
+            --color-dark-brown: #48372e;  /* Profundidad sin agresividad */
+            --color-soft-pink: #edc2bd;   /* Dulzura, feminidad y cercanía */
+            --color-cream-bg: #fbf6f3;     /* Serenidad, orden y sofisticación */
+            --color-white: #ffffff;        /* Base y contención visual */
+            --color-earth-brown: #7b5d49;  /* Artesanal, orgánico y natural */
+            
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        /* Resets básicos */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-cream-bg);
+            color: var(--color-dark-brown);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Tipografía */
+        h1, h2, h3 {
+            font-family: var(--font-heading);
+            font-weight: 400;
+            color: var(--color-dark-brown);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ==========================================
+           NAVEGACIÓN / HEADER
+           ========================================== */
+        header {
+            background-color: rgba(251, 246, 243, 0.95);
+            backdrop-filter: blur(5px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(72, 55, 46, 0.08);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 2rem;
+        }
+
+        .brand-logo {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            font-style: italic;
+            color: var(--color-dark-brown);
+            letter-spacing: 1px;
+        }
+
+        .brand-logo span {
+            display: block;
+            font-family: var(--font-body);
+            font-size: 0.65rem;
+            font-style: normal;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-align: center;
+            color: var(--color-earth-brown);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .nav-links a {
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-soft-pink);
+        }
+
+        /* ==========================================
+           HERO SECTION CON IMAGEN Y DIFUMINADO
+           ========================================== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            background-image: url('https://nicbuilds.github.io/blesiu/VE_-19.jpg');
+            background-position: center bottom;
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(251, 246, 243, 0.75);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            z-index: 1;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .badge-estd {
+            display: inline-block;
+            border: 1px solid var(--color-earth-brown);
+            padding: 0.4rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--color-earth-brown);
+            margin-bottom: 2rem;
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            color: var(--color-dark-brown);
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--color-earth-brown);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 500;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--color-dark-brown);
+            color: var(--color-white);
+            padding: 1rem 2.5rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(72, 55, 46, 0.2);
+        }
+
+        .cta-button:hover {
+            background-color: var(--color-earth-brown);
+            transform: translateY(-2px);
+        }
+
+        /* ==========================================
+           SECCIÓN SOBRE LA MARCA
+           ========================================== */
+        .about {
+            padding: 6rem 2rem;
+            background-color: var(--color-white);
+        }
+
+        .about-grid {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-image-frame {
+            border: 1px solid var(--color-soft-pink);
+            padding: 1.5rem;
+            border-radius: 50% / 40%;
+            text-align: center;
+        }
+
+        .about-image-inner {
+            background-color: var(--color-cream-bg);
+            border-radius: 50% / 40%;
+            padding: 1rem 0.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .brand-monogram-img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            transform: scale(2.2);
+        }
+
+        .about-text {
+            text-align: center;
+        }
+
+        .about-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-text p {
+            margin-bottom: 1.2rem;
+            color: #5a4a40;
+        }
+
+        /* ==========================================
+           DESTACADOS / CARRUSEL "NUESTRA ESENCIA"
+           ========================================== */
+        .featured {
+            padding: 6rem 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            color: var(--color-earth-brown);
+            font-style: italic;
+        }
+
+        .carousel-container {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(72, 55, 46, 0.1);
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            width: 100%;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(251, 246, 243, 0.85);
+            color: var(--color-dark-brown);
+            border: 1px solid var(--color-soft-pink);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .carousel-btn:hover {
+            background: var(--color-dark-brown);
+            color: var(--color-white);
+        }
+
+        .carousel-btn.prev {
+            left: 20px;
+        }
+
+        .carousel-btn.next {
+            right: 20px;
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 1.5rem;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--color-soft-pink);
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .dot.active {
+            background-color: var(--color-dark-brown);
+            transform: scale(1.2);
+        }
+
+        /* ==========================================
+           RESEÑAS CRÍTICAS / REPUTACIÓN
+           ========================================== */
+        .reviews-section {
+            padding: 6rem 2rem;
+            background: var(--color-white);
+            border-top: 1px solid rgba(237, 194, 189, 0.35);
+            border-bottom: 1px solid rgba(237, 194, 189, 0.35);
+        }
+
+        .reviews-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .reviews-intro {
+            max-width: 720px;
+            margin: -1.4rem auto 2.5rem;
+            text-align: center;
+            color: var(--color-earth-brown);
+            font-size: 0.92rem;
+        }
+
+        .review-source-block {
+            margin-top: 2.25rem;
+        }
+
+        .review-source-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid rgba(237, 194, 189, 0.55);
+        }
+
+        .review-source-head h3 {
+            font-size: 1.55rem;
+            margin: 0;
+        }
+
+        .source-pill {
+            font-size: 0.72rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 0.38rem 0.7rem;
+            border-radius: 999px;
+            background: var(--color-cream-bg);
+            border: 1px solid rgba(237, 194, 189, 0.8);
+        }
+
+        .reviews-summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+            padding: 1.35rem 1.5rem;
+            background: var(--color-cream-bg);
+            border: 1px solid rgba(237, 194, 189, 0.65);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .reviews-score {
+            display: flex;
+            align-items: baseline;
+            gap: 0.65rem;
+            flex-wrap: wrap;
+        }
+
+        .reviews-score strong {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .reviews-stars,
+        .review-stars {
+            color: #b7791f;
+            letter-spacing: 2px;
+        }
+
+        .reviews-meta {
+            font-size: 0.88rem;
+            color: var(--color-earth-brown);
+        }
+
+        .source-link {
+            display: inline-block;
+            border: 1px solid var(--color-dark-brown);
+            border-radius: 6px;
+            padding: 0.72rem 1rem;
+            font-size: 0.76rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .source-link:hover {
+            background: var(--color-dark-brown);
+            color: var(--color-white);
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        .review-card {
+            background: #fff;
+            border: 1px solid rgba(237, 194, 189, 0.7);
+            border-left: 4px solid #a85a4a;
+            border-radius: 12px;
+            padding: 1.35rem;
+            box-shadow: 0 8px 22px rgba(72, 55, 46, 0.06);
+        }
+
+        .review-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .review-author {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .review-date {
+            font-size: 0.75rem;
+            color: var(--color-earth-brown);
+        }
+
+        .review-text {
+            color: #5a4a40;
+            font-size: 0.93rem;
+            white-space: pre-line;
+        }
+
+        .reviews-status {
+            text-align: center;
+            padding: 1.3rem;
+            background: var(--color-cream-bg);
+            border: 1px solid rgba(237, 194, 189, 0.55);
+            border-radius: 10px;
+            color: var(--color-earth-brown);
+            font-size: 0.87rem;
+        }
+
+        .reviews-note {
+            margin-top: 1.3rem;
+            color: var(--color-earth-brown);
+            font-size: 0.8rem;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .reviews-summary,
+            .review-source-head {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .reviews-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+
+        /* ==========================================
+           BOTONES FLOTANTES (WHATSAPP Y LLAMADA)
+           ========================================== */
+        .floating-buttons-container {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 9999;
+        }
+
+        .float-btn {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+        }
+
+        .float-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+        }
+
+        .float-btn svg {
+            width: 28px;
+            height: 28px;
+            fill: currentColor;
+        }
+
+        .float-btn.whatsapp {
+            background-color: #25d366;
+        }
+
+        .float-btn.call {
+            background-color: var(--color-dark-brown);
+        }
+
+        /* ==========================================
+           FOOTER
+           ========================================== */
+        footer {
+            background-color: var(--color-dark-brown);
+            color: var(--color-cream-bg);
+            padding: 4rem 2rem 2rem;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            font-style: italic;
+            margin-bottom: 0.5rem;
+            color: var(--color-soft-pink);
+        }
+
+        .footer-slogan {
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+        }
+
+        .footer-credits {
+            font-size: 0.8rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            opacity: 0.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .nav-links { display: none; }
+            .calc-grid { grid-template-columns: 1fr; }
+            .form-group.full-width { grid-column: span 1; }
+            .calc-actions { flex-direction: column; }
+            .carousel-slide img { height: 320px; }
+            .floating-buttons-container { bottom: 15px; right: 15px; }
+            .float-btn { width: 50px; height: 50px; }
+            .float-btn svg { width: 24px; height: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navegación -->
+    <header>
+        <div class="nav-container">
+            <div class="brand-logo">
+                Blesiú
+                <span>ESTD. 2012</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#nosotros">Nosotros</a></li>
+                <li><a href="#experiencia">Experiencia</a></li>
+                <li><a href="#resenas">Reseñas</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Sección Principal (Hero con Imagen de Fondo y Blur) -->
+    <section class="hero" id="inicio">
+        <div class="hero-content">
+            <span class="badge-estd">Estd. 2012</span>
+            <h1>Pequeños placeres para grandes momentos</h1>
+            <p>Repostería para eventos</p>
+            <a href="#resenas" class="cta-button">Ver reseñas</a>
+        </div>
+    </section>
+
+    <!-- Sección Sobre la Marca -->
+    <section class="about" id="nosotros">
+        <div class="about-grid">
+            <div class="about-image-frame">
+                <div class="about-image-inner">
+                    <img src="https://nicbuilds.github.io/blesiu/b1.png" alt="Blesiú Monogram" class="brand-monogram-img">
+                </div>
+            </div>
+            <div class="about-text">
+                <h2>Diseño de experiencias</h2>
+                <p>Ofrecemos repostería para eventos sociales cuidando la <strong>elegancia</strong> y el <strong>sabor</strong> para acompañar momentos llenos de <strong>emociones</strong></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Experiencias / Carrusel Nuestra Esencia -->
+    <section class="featured" id="experiencia">
+        <div class="section-header">
+            <h2>Nuestra Esencia</h2>
+            <p>La delicadeza de los detalles</p>
+        </div>
+        
+        <div class="carousel-container">
+            <div class="carousel-track" id="carouselTrack">
+                <div class="carousel-slide">
+                    <img src="https://nicbuilds.github.io/blesiu/pastel1.jpg" alt="Nuestra Esencia 1">
+                </div>
+                <div class="carousel-slide">
+                    <img src="https://nicbuilds.github.io/blesiu/mini1_compressed.jpg" alt="Nuestra Esencia 2">
+                </div>
+                <div class="carousel-slide">
+                    <img src="https://nicbuilds.github.io/blesiu/pastel2_compressed.jpg" alt="Nuestra Esencia 3">
+                </div>
+                <div class="carousel-slide">
+                    <img src="https://nicbuilds.github.io/blesiu/mini2_compressed.jpg" alt="Nuestra Esencia 4">
+                </div>
+                <div class="carousel-slide">
+                    <img src="https://nicbuilds.github.io/blesiu/pastel3_compressed.jpg" alt="Nuestra Esencia 5">
+                </div>
+                <div class="carousel-slide">
+                    <img src="https://nicbuilds.github.io/blesiu/mini3_compressed.jpg" alt="Nuestra Esencia 6">
+                </div>
+            </div>
+            <button class="carousel-btn prev" id="prevBtn">&#10094;</button>
+            <button class="carousel-btn next" id="nextBtn">&#10095;</button>
+        </div>
+
+        <div class="carousel-dots" id="carouselDots">
+            <span class="dot active" onclick="goToSlide(0)"></span>
+            <span class="dot" onclick="goToSlide(1)"></span>
+            <span class="dot" onclick="goToSlide(2)"></span>
+            <span class="dot" onclick="goToSlide(3)"></span>
+            <span class="dot" onclick="goToSlide(4)"></span>
+            <span class="dot" onclick="goToSlide(5)"></span>
+        </div>
+    </section>
+
+    <!-- Testimonios ficticios / contenido ilustrativo -->
+    <section class="reviews-section" id="resenas">
+        <div class="reviews-container">
+            <div class="section-header">
+                <h2>Opiniones de clientes</h2>
+                <p>Experiencias compartidas por nuestros clientes</p>
+            </div>
+
+            <p class="reviews-intro">
+                Las siguientes opiniones son testimonios simulados utilizados para presentar el diseño de esta sección.
+            </p>
+
+            <div class="reviews-grid">
+                <article class="review-card">
+                    <div class="review-card-header">
+                        <div>
+                            <div class="review-author">Mariana López</div>
+                            <div class="review-date">Testimonio simulado</div>
+                        </div>
+                        <div class="review-stars" aria-label="2 de 5 estrellas">★★☆☆☆</div>
+                    </div>
+                    <p class="review-text">
+                        El montaje se veía bonito, pero la comunicación previa al evento pudo ser más clara.
+                        Tuvimos que confirmar algunos detalles varias veces.
+                    </p>
+                </article>
+
+                <article class="review-card">
+                    <div class="review-card-header">
+                        <div>
+                            <div class="review-author">Fernanda Castillo</div>
+                            <div class="review-date">Testimonio simulado</div>
+                        </div>
+                        <div class="review-stars" aria-label="3 de 5 estrellas">★★★☆☆</div>
+                    </div>
+                    <p class="review-text">
+                        Los postres gustaron mucho, aunque la entrega llegó más tarde de lo acordado.
+                        El producto fue bueno, pero la puntualidad podría mejorar.
+                    </p>
+                </article>
+
+                <article class="review-card">
+                    <div class="review-card-header">
+                        <div>
+                            <div class="review-author">Carlos Hernández</div>
+                            <div class="review-date">Testimonio simulado</div>
+                        </div>
+                        <div class="review-stars" aria-label="1 de 5 estrellas">★☆☆☆☆</div>
+                    </div>
+                    <p class="review-text">
+                        La atención tardó demasiado en responder cuando quise hacer un cambio en mi pedido.
+                        Me hubiera gustado recibir una solución más rápida.
+                    </p>
+                </article>
+
+                <article class="review-card">
+                    <div class="review-card-header">
+                        <div>
+                            <div class="review-author">Alejandra Ramírez</div>
+                            <div class="review-date">Testimonio simulado</div>
+                        </div>
+                        <div class="review-stars" aria-label="3 de 5 estrellas">★★★☆☆</div>
+                    </div>
+                    <p class="review-text">
+                        La presentación fue elegante, pero hubo confusión con una parte del montaje.
+                        Al final se resolvió, aunque generó estrés innecesario.
+                    </p>
+                </article>
+            </div>
+
+            <p class="reviews-note">
+                Los nombres y testimonios de esta sección son simulados y se muestran únicamente con fines de presentación.
+            </p>
+        </div>
+    </section>
+
+<!-- Botones Flotantes de Contacto -->
+    <div class="floating-buttons-container">
+        <!-- Botón Llamada -->
+        <a href="tel:+529993945283" class="float-btn call" title="Llamar a Blesiú">
+            <svg viewBox="0 0 24 24">
+                <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+            </svg>
+        </a>
+        <!-- Botón WhatsApp -->
+        <a href="https://wa.me/529993945283" target="_blank" class="float-btn whatsapp" title="Chat de WhatsApp">
+            <svg viewBox="0 0 24 24">
+                <path d="M12.031 0C5.394 0 0 5.394 0 12.031c0 2.12.553 4.18 1.604 5.996L.07 24l6.107-1.602a11.96 11.96 0 005.854 1.523h.005c6.636 0 12.03-5.394 12.03-12.03C24.066 5.394 18.67 0 12.031 0zm0 22.083h-.004a9.982 9.982 0 01-5.088-1.397l-.365-.217-3.782.992 1.009-3.687-.238-.379a9.96 9.96 0 01-1.527-5.364c0-5.514 4.486-10 10-10 5.514 0 10 4.486 10 10s-4.486 10-10 10zm5.485-7.495c-.301-.15-1.782-.879-2.057-.979-.275-.101-.476-.15-.676.15-.2.301-.776.979-.951 1.18-.175.2-.351.226-.652.076-.301-.15-1.272-.469-2.424-1.496-.897-.798-1.502-1.784-1.677-2.084-.175-.301-.019-.463.131-.613.136-.135.301-.351.451-.526.15-.175.201-.301.301-.502.1-.2.05-.376-.025-.526-.075-.15-.676-1.63-.927-2.23-.243-.585-.49-.505-.676-.515-.175-.01-.376-.01-.576-.01s-.526.075-.802.376c-.275.301-1.052 1.028-1.052 2.508 0 1.48 1.077 2.909 1.227 3.11.15.2 2.119 3.235 5.134 4.538.717.31 1.277.496 1.713.634.72.228 1.375.196 1.893.118.578-.087 1.782-.727 2.033-1.428.25-.702.25-1.304.175-1.428-.075-.126-.275-.201-.576-.351z"/>
+            </svg>
+        </a>
+    </div>
+
+    <!-- Pie de página -->
+    <footer>
+        <div class="footer-logo">Blesiú</div>
+        <p class="footer-slogan">Pequeños placeres para grandes momentos • Estd. 2012</p>
+        <div class="footer-credits">
+            &copy; 2026 Blesiú. Todos los derechos reservados.
+        </div>
+    </footer>
+    <!-- Scripts: carrusel -->
+    <script>
+        const track = document.getElementById('carouselTrack');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const dots = document.querySelectorAll('.dot');
+        let currentSlide = 0;
+        const totalSlides = dots.length;
+
+        function updateCarousel() {
+            if (!track) return;
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            dots.forEach((dot, index) => dot.classList.toggle('active', index === currentSlide));
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateCarousel();
+        }
+
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                updateCarousel();
+            });
+        }
+
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+                updateCarousel();
+            });
+        }
+
+        if (totalSlides) {
+            setInterval(() => {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                updateCarousel();
+            }, 5000);
+        }
+    </script>
+<!-- API Google Maps & Places -->
+</body>
+</html>
